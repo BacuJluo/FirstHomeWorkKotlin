@@ -5,15 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.home.firsthomeworkkotlin.databinding.FragmentMainBinding
+import com.home.firsthomeworkkotlin.viewmodel.AppState
 import com.home.firsthomeworkkotlin.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding //утечка памяти
+
+    override fun onDestroy() {
+        super.onDestroy()
+        //FIXME сделать зануление для binding
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,13 +29,14 @@ class MainFragment : Fragment() {
         //надуваем макет через xml
         //return inflater.inflate(R.layout.fragment_main, container, false)
         binding = FragmentMainBinding.inflate(inflater, container, false)
-        return binding.root
+        val view = binding.root
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnOne.setOnClickListener { }
+        //binding.btnOne.setOnClickListener { }
         /*одинаковые методы, но есть отличия. Если делать через binding то отсеиваются
         NullPointerExeption
         view.findViewById<Button>(R.id.btnOne).setOnClickListener {  }*/
@@ -39,8 +47,8 @@ class MainFragment : Fragment() {
         val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         //Callback лайвдэйты
-        val observer = object : Observer<Any> {
-            override fun onChanged(data: Any) {
+        val observer = object : Observer<AppState> {
+            override fun onChanged(data: AppState) {
                 renderData(data)
             }
         }
@@ -52,9 +60,22 @@ class MainFragment : Fragment() {
         viewModel.getWeather()
     }
 
-    private fun renderData(data: Any) {
-        //отрисовка Data
-        Toast.makeText(requireContext(), "Работает", Toast.LENGTH_SHORT).show()
+    private fun renderData(data: AppState) {
+        //отрисовка data
+        when(data){
+            is AppState.Error -> {
+                binding.loadingLayout.visibility = View.GONE
+                binding.cityName.text = "Не получилось ${data.error}"
+            }
+            is AppState.Loading -> {
+                binding.loadingLayout.visibility = View.VISIBLE
+            }
+            is AppState.Success -> {
+                binding.loadingLayout.visibility = View.GONE
+                binding.cityName.text = "Получилось"
+            }
+        }
+
     }
 
     companion object {

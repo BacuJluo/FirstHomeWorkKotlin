@@ -5,17 +5,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.lang.Thread.sleep
 
-class MainViewModel(private val liveData:MutableLiveData<Any> = MutableLiveData()): ViewModel() {
+class MainViewModel(private val liveData:MutableLiveData<AppState> = MutableLiveData()): ViewModel() {
 
-    fun getData():LiveData<Any>{
+    fun getData():LiveData<AppState>{
         return liveData
     }
 
     fun getWeather(){
         Thread{
-            sleep(1000)
+            liveData.postValue(AppState.Loading)
+            sleep(3000)
+            if ((0..10).random() > 5)
             //после обновления liveData автоматически рассылает всем своим слушателям ее данные
-            liveData.postValue(Any())
+            liveData.postValue(AppState.Success(Any()))
+            else
+                liveData.postValue(AppState.Error(IllegalAccessError()))
         }.start()
     }
 
