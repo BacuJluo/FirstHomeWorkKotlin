@@ -1,10 +1,13 @@
 package com.home.firsthomeworkkotlin.viewmodel
 
+import com.home.firsthomeworkkotlin.repository.Weather
+
 //запечатанный класс
 sealed class AppState {
 
     object Loading:AppState()
-    data class Success(val weatherData:Any):AppState()
+    //Неважно откуда но получаем погоду
+    data class Success(val weatherData:Weather):AppState()
     data class Error(val error:Throwable):AppState()
 
 }

@@ -1,5 +1,8 @@
 package com.home.firsthomeworkkotlin.view
 
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
