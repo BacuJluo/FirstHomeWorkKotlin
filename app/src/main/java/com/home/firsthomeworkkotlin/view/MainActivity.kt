@@ -1,28 +1,19 @@
 package com.home.firsthomeworkkotlin.view
 
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-
+import android.os.Looper
+import androidx.appcompat.app.AppCompatActivity
 import com.home.firsthomeworkkotlin.R
-import com.home.firsthomeworkkotlin.view.main.MainFragment
+import com.home.firsthomeworkkotlin.view.weatherlist.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        if(savedInstanceState==null){ //если первый запуск
-            supportFragmentManager.beginTransaction().replace(R.id.container, MainFragment.newInstance()).commit()
+        if(savedInstanceState==null){
+            supportFragmentManager.beginTransaction().replace(R.id.container, WeatherListFragment.newInstance()).commit()
         }
-
-
     }
-
-
 }
 
 

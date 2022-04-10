@@ -7,7 +7,7 @@ sealed class AppState {
 
     object Loading:AppState()
     //Неважно откуда но получаем погоду
-    data class Success(val weatherData:Weather):AppState()
+    data class Success(val weatherListData:List<Weather>):AppState()
     data class Error(val error:Throwable):AppState()
 
 }

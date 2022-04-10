@@ -1,11 +1,8 @@
 package com.home.firsthomeworkkotlin.viewmodel
 
-import android.view.View
-import android.widget.RadioButton
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.home.firsthomeworkkotlin.R
 import com.home.firsthomeworkkotlin.repository.Repository
 import com.home.firsthomeworkkotlin.repository.RepositoryImplementation
 
@@ -14,44 +11,24 @@ class MainViewModel(
     private val repository: Repository = RepositoryImplementation()
 ) : ViewModel() {
 
-    private val SOURCE_LOCAL:Int = 1
-    private val SOURCE_SERVER:Int = 2
-
     fun getData(): LiveData<AppState> {
         return liveData
     }
 
-    fun getWeather() {
+    fun getWeatherRussian() = getWeather(true)
+    fun getWeatherWorld() = getWeather(false)
+
+
+    private fun getWeather(isRussian: Boolean) {
         Thread {
             liveData.postValue(AppState.Loading)
-            if ((0..10).random() > 5) {
-                //после обновления liveData автоматически рассылает всем своим слушателям ее данные
-                val answerLocale = repository.getWeatherFromLocalStorage()
-
+            //после обновления liveData автоматически рассылает всем своим слушателям ее данные
+            if(true) {
+                val answerLocale = if (!isRussian) repository.getWorldWeatherFromLocalStorage() else repository.getRussianWeatherFromLocalStorage()
                 liveData.postValue(AppState.Success(answerLocale))
-            }
-            else {
-                liveData.postValue(AppState.Error(IllegalAccessError()))
-
-            }
+            }else{liveData.postValue(AppState.Error(IllegalAccessException()))}
         }.start()
     }
 
-    fun onRadioButtonClicked(view: View) {
-        if (view is RadioButton){
-            val checked = view.isChecked
-
-            when(view.getId()){
-                R.id.sourceServer ->
-                    if (checked){
-
-                    }
-                R.id.sourceLocal ->
-                    if (checked){
-
-                    }
-            }
-        }
-    }
 
 }
