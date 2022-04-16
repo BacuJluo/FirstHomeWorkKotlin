@@ -26,7 +26,7 @@ class DetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding =FragmentDetailsBinding.inflate(inflater,container, false)
         //return inflater.inflate(R.layout.fragment_main, container, false)
         return binding.root
