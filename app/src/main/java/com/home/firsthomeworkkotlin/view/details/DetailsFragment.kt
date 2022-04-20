@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import com.home.firsthomeworkkotlin.databinding.FragmentDetailsBinding
 import com.home.firsthomeworkkotlin.repository.Weather
 import com.home.firsthomeworkkotlin.utlis.KEY_BUNDLE_WEATHER
-import com.home.firsthomeworkkotlin.viewmodel.AppState
 import com.google.android.material.snackbar.Snackbar
 
 class DetailsFragment : Fragment() {
@@ -35,19 +34,25 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val weather:Weather = requireArguments().getParcelable<Weather>(KEY_BUNDLE_WEATHER)!!
-        renderData(weather)
+        //если агрументы не null то мы их передаем в renderData
+        arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
+                renderData(it)
+        }
     }
 
     private fun renderData(weather:Weather){
-        binding.loadingLayout.visibility = View.GONE
-        binding.cityName.text = weather.city.name
-        binding.temperatureValue.text = weather.temperature.toString()
-        binding.feelsLikeValue.text = weather.feelsLike.toString()
-        binding.cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
-        //Snackbar.make(binding.mainView, "Получилось", Snackbar.LENGTH_LONG).show()
-        //Toast.makeText(requireContext(),"РАБОТАЕТ",Toast.LENGTH_SHORT).show()
+        with(binding){
+            loadingLayout.visibility = View.GONE
+                cityName.text = weather.city.name
+                temperatureValue.text = weather.temperature.toString()
+                feelsLikeValue.text = weather.feelsLike.toString()
+                "${weather.city.lat} ${weather.city.lon}".apply { cityCoordinates.text = this }
+            mainView.showSnackBar(cityName.text as String, weather.temperature,binding)
+            //Toast.makeText(requireContext(),"РАБОТАЕТ",Toast.LENGTH_SHORT).show()
+        }
     }
+
+
 
     companion object {
         @JvmStatic
@@ -58,4 +63,20 @@ class DetailsFragment : Fragment() {
         }
     }
 }
+
+//extension function (Функция расширения)
+private fun View.showSnackBar(text: String, weather: Int, binding: FragmentDetailsBinding) {
+    when {
+        weather>10 -> {
+            Snackbar.make(binding.mainView, "$text: Тепло", Snackbar.LENGTH_LONG).show()
+        }
+        weather>0 -> {
+            Snackbar.make(binding.mainView, "$text: Прохладно", Snackbar.LENGTH_LONG).show()
+        }
+        else -> {
+            Snackbar.make(binding.mainView, "$text: Холодно", Snackbar.LENGTH_LONG).show()
+        }
+    }
+}
+
 

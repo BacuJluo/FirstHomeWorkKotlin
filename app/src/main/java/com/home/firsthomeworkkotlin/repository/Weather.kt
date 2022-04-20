@@ -12,8 +12,7 @@ fun getDefaultCity() = City("Москва", 55.75, 37.61)
 @Parcelize
 data class City(val name:String,val lat:Double,val lon:Double):Parcelable
 
-fun getWorldCities(): List<Weather> {
-    return listOf(
+fun getWorldCities() = listOf(
         Weather(City("Лондон", 51.5085300, -0.1257400), 1, 2),
         Weather(City("Токио", 35.6895000, 139.6917100), 3, 4),
         Weather(City("Париж", 48.8534100, 2.3488000), 5, 6),
@@ -25,10 +24,8 @@ fun getWorldCities(): List<Weather> {
         Weather(City("Киев", 50.4501, 30.523400000000038), 17, 18),
         Weather(City("Пекин", 39.90419989999999, 116.40739630000007), 19, 20)
     )
-}
 
-fun getRussianCities(): List<Weather> {
-    return listOf(
+fun getRussianCities() = listOf(
         Weather(City("Москва", 55.755826, 37.617299900000035), +6, +6),
         Weather(City("Санкт-Петербург", 59.9342802, 30.335098600000038), +5, +4),
         Weather(City("Новосибирск", 55.00835259999999, 82.93573270000002), -4, -6),
@@ -40,4 +37,4 @@ fun getRussianCities(): List<Weather> {
         Weather(City("Ростов-на-Дону", 47.2357137, 39.701505), +15, +16),
         Weather(City("Уфа", 54.7387621, 55.972055400000045), +5, +6)
     )
-}
+

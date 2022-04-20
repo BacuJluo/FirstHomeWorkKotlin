@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.home.firsthomeworkkotlin.R
 import com.home.firsthomeworkkotlin.databinding.FragmentWeatherListBinding
 import com.home.firsthomeworkkotlin.repository.Weather
@@ -49,13 +50,12 @@ class WeatherListFragment : Fragment(),OnItemListClickListener {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         initRecycler()
+        //initRecyclerView() Не работает
 
         /*//binding.btnOne.setOnClickListener { }
         одинаковые методы, но есть отличия. Если делать через binding то отсеиваются
         NullPointerExeption
         view.findViewById<Button>(R.id.btnOne).setOnClickListener {  }*/
-
-
     }
 
     private fun initViewModel() {
@@ -66,11 +66,7 @@ class WeatherListFragment : Fragment(),OnItemListClickListener {
 
         //Callback лайвдэйты
         //меняем Any на собственный AppState.class
-        val observer = object : Observer<AppState> {
-            override fun onChanged(data: AppState) {
-                renderData(data)
-            }
-        }
+        val observer =  { data:AppState -> renderData(data) }
         /*Обращение к LiveData, чтоб подписала фрагмент как слушателя на LiveData, ориентируясь на его жизненный цикл
         Фрагмент будет слушателем LiveData до тех пор пока не умрет, в этом случае LiveData
         уже не будет отправлять в пустоту свои данные. В Callback observer будут рассылаться обновления LiveData*/
@@ -96,8 +92,18 @@ class WeatherListFragment : Fragment(),OnItemListClickListener {
         viewModel.getWeatherRussian()
     }
 
+    //Так работает
     private fun initRecycler() {
         binding.recyclerView.adapter = adapter
+    }
+
+    //Так не работает приходит savedInstanceState = null
+    private fun initRecyclerView() {
+        binding.recyclerView.apply {
+            this.adapter = adapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+
     }
 
     private fun renderData(data: AppState) = //отрисовка data
@@ -126,11 +132,11 @@ class WeatherListFragment : Fragment(),OnItemListClickListener {
 
 
     override fun onItemClick(weather: Weather) {
-        val bundle = Bundle()
-        bundle.putParcelable(KEY_BUNDLE_WEATHER, weather)
         requireActivity().supportFragmentManager.beginTransaction().add(
             R.id.container,
-            DetailsFragment.newInstance(bundle)
+            DetailsFragment.newInstance(Bundle().apply {
+                putParcelable(KEY_BUNDLE_WEATHER, weather)
+            })
         ).addToBackStack("").commit()
     }
 

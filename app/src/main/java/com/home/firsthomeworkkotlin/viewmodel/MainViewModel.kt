@@ -21,13 +21,13 @@ class MainViewModel(
 
     private fun getWeather(isRussian: Boolean) {
         Thread {
-            liveData.postValue(AppState.Loading)
-            //после обновления liveData автоматически рассылает всем своим слушателям ее данные
-            if(true) {
+            with(liveData){
+                postValue(AppState.Loading)
+                //после обновления liveData автоматически рассылает всем своим слушателям ее данные
                 val answerLocale = if (!isRussian) repository.getWorldWeatherFromLocalStorage() else repository.getRussianWeatherFromLocalStorage()
-                liveData.postValue(AppState.Success(answerLocale))
-            }else{liveData.postValue(AppState.Error(IllegalAccessException()))}
-        }.start()
+                postValue(AppState.Success(answerLocale))
+            }
+            }.start()
     }
 
 
