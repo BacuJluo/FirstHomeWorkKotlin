@@ -8,6 +8,7 @@ import com.home.firsthomeworkkotlin.databinding.FragmentDetailsBinding
 import com.home.firsthomeworkkotlin.repository.Weather
 import com.home.firsthomeworkkotlin.utlis.KEY_BUNDLE_WEATHER
 import com.google.android.material.snackbar.Snackbar
+import com.home.firsthomeworkkotlin.R
 
 class DetailsFragment : Fragment() {
 
@@ -48,11 +49,13 @@ class DetailsFragment : Fragment() {
                 feelsLikeValue.text = weather.feelsLike.toString()
                 "${weather.city.lat} ${weather.city.lon}".apply { cityCoordinates.text = this }
             mainView.showSnackBar(cityName.text as String, weather.temperature,binding)
-            //Toast.makeText(requireContext(),"РАБОТАЕТ",Toast.LENGTH_SHORT).show()
+            //mainView.withAction(getString(R.string.error), getString(R.string.try_again), {sentRequest()}, Snackbar.LENGTH_LONG)
         }
     }
 
+    private fun sentRequest() {
 
+    }
 
     companion object {
         @JvmStatic
@@ -62,6 +65,12 @@ class DetailsFragment : Fragment() {
             return fragment
         }
     }
+}
+
+//extension функция от Андрея
+private fun View.withAction(text: String, actionText: String, action: (View) -> Unit,
+    length: Int = Snackbar.LENGTH_INDEFINITE) {
+    Snackbar.make(this, text, length).setAction(actionText, action).show()
 }
 
 //extension function (Функция расширения)
