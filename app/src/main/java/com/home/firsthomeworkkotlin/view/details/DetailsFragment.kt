@@ -4,11 +4,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.home.firsthomeworkkotlin.databinding.FragmentDetailsBinding
 import com.home.firsthomeworkkotlin.repository.Weather
 import com.home.firsthomeworkkotlin.utlis.KEY_BUNDLE_WEATHER
 import com.google.android.material.snackbar.Snackbar
 import com.home.firsthomeworkkotlin.R
+import kotlinx.android.synthetic.main.fragment_details.view.*
 
 class DetailsFragment : Fragment() {
 
@@ -48,8 +50,10 @@ class DetailsFragment : Fragment() {
                 temperatureValue.text = weather.temperature.toString()
                 feelsLikeValue.text = weather.feelsLike.toString()
                 "${weather.city.lat} ${weather.city.lon}".apply { cityCoordinates.text = this }
-            mainView.showSnackBar(cityName.text as String, weather.temperature,binding)
-            //mainView.withAction(getString(R.string.error), getString(R.string.try_again), {sentRequest()}, Snackbar.LENGTH_LONG)
+            //Toast.makeText(requireContext(),"РАБОТАЕТ",Toast.LENGTH_SHORT).show()
+            mainView.withOutAction(getString(R.string.success))
+            mainView.withAction(getString(R.string.error), getString(R.string.try_again), { sentRequest() },
+                Snackbar.LENGTH_LONG)
         }
     }
 
@@ -68,24 +72,13 @@ class DetailsFragment : Fragment() {
 }
 
 //extension функция от Андрея
-private fun View.withAction(text: String, actionText: String, action: (View) -> Unit,
-    length: Int = Snackbar.LENGTH_INDEFINITE) {
+//функция расширяет Snackbar
+private fun View.withAction(text: String, actionText: String, action: (View) -> Unit, length: Int = Snackbar.LENGTH_INDEFINITE) {
     Snackbar.make(this, text, length).setAction(actionText, action).show()
 }
 
-//extension function (Функция расширения)
-private fun View.showSnackBar(text: String, weather: Int, binding: FragmentDetailsBinding) {
-    when {
-        weather>10 -> {
-            Snackbar.make(binding.mainView, "$text: Тепло", Snackbar.LENGTH_LONG).show()
-        }
-        weather>0 -> {
-            Snackbar.make(binding.mainView, "$text: Прохладно", Snackbar.LENGTH_LONG).show()
-        }
-        else -> {
-            Snackbar.make(binding.mainView, "$text: Холодно", Snackbar.LENGTH_LONG).show()
-        }
-    }
+private fun View.withOutAction(text: String, length: Int = Snackbar.LENGTH_LONG) {
+    Snackbar.make(this, text, length).show()
 }
 
 

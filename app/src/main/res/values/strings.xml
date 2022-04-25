@@ -6,7 +6,9 @@
     <string name="feels_like_label">Ощущается как</string>
     <string name="city_coordinates">lt/ln: %s, %s"</string>
     <string name="error">Error</string>
+    <string name="success">Success</string>
     <string name="reload">Reload</string>
     <string name="moscow">Москва</string>
     <string name="try_again">Повторите попытку</string>
+    <string name="ok">ok</string>
 </resources>

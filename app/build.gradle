@@ -8,6 +8,7 @@ apply plugin: 'kotlin-android'
 android {
     compileSdk 31
 
+    //View Binding On/Off
     buildFeatures{
         viewBinding true
     }
