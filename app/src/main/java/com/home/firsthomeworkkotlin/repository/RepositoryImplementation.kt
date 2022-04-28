@@ -1,7 +1,11 @@
 package com.home.firsthomeworkkotlin.repository
 
+import com.home.firsthomeworkkotlin.datasource.Weather
+import com.home.firsthomeworkkotlin.datasource.getRussianCities
+import com.home.firsthomeworkkotlin.datasource.getWorldCities
+
 class RepositoryImplementation:Repository {
-    override fun getWeatherFromServer():Weather {
+    override fun getWeatherFromServer(): Weather {
         Thread.sleep(2000)
         return Weather()
     }

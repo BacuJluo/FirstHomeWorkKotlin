@@ -6,14 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.home.firsthomeworkkotlin.R
 import com.home.firsthomeworkkotlin.databinding.FragmentWeatherListBinding
-import com.home.firsthomeworkkotlin.repository.Weather
+import com.home.firsthomeworkkotlin.datasource.Weather
 import com.home.firsthomeworkkotlin.utlis.KEY_BUNDLE_WEATHER
-import com.home.firsthomeworkkotlin.view.MainActivity
 import com.home.firsthomeworkkotlin.view.details.DetailsFragment
 import com.home.firsthomeworkkotlin.viewmodel.AppState
 import com.home.firsthomeworkkotlin.viewmodel.MainViewModel

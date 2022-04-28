@@ -1,6 +1,6 @@
 package com.home.firsthomeworkkotlin.viewmodel
 
-import com.home.firsthomeworkkotlin.repository.Weather
+import com.home.firsthomeworkkotlin.datasource.Weather
 
 //запечатанный класс
 sealed class AppState {
