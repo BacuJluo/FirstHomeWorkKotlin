@@ -60,7 +60,7 @@ class DetailsFragment : Fragment(), OnServerResponse {
 
             "${weather.info.lat} ${weather.info.lon}".apply { cityCoordinates.text = this }
             //Toast.makeText(requireContext(),"РАБОТАЕТ",Toast.LENGTH_SHORT).show()
-            mainView.withOutAction(getString(R.string.success))
+            //mainView.withOutAction(getString(R.string.success))
             /*mainView.snackBarWithAction(
                 getString(R.string.error), getString(R.string.try_again), { sentRequest() },
                 Snackbar.LENGTH_LONG

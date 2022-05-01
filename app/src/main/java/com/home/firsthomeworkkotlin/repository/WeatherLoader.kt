@@ -60,8 +60,7 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse, val 
                             Handler(Looper.getMainLooper()).post {
                                 onServerResponseListener.onResponse(weatherDTO)
                             }
-                            Snackbar.make(view,
-                                "Все хорошо\n$",
+                            Snackbar.make(view,"Успешно",
                                 Snackbar.LENGTH_LONG).show()
                         }
                     }
