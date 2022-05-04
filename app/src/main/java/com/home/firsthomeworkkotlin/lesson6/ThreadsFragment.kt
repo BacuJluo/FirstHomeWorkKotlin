@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,19 +50,43 @@ class ThreadsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val myThreads = MyThreads()
+        myThreads.start()
         with(binding){
+            val time = editText.text.toString().toLong()
+            var counter = 0
             button.setOnClickListener {
                 Thread{
-                    val time = editText.text.toString().toLong()
                     sleep(time*1000L)
                     requireActivity().runOnUiThread{"Плотно поработали $time сек".also { textView.text = it }}
+                    Handler(Looper.getMainLooper()).post{
+                        createTextView("${Thread.currentThread().name} ${++counter}")
+                    }
+
                 }.start()
             }
+
+            //вечный поток
+            buttonSecond.setOnClickListener {
+                myThreads.mHandler?.post{
+                    sleep(time*1000L)
+                    requireActivity().runOnUiThread{"Поток работает $time сек".also { textViewSecond.text = it }}
+                    createTextView("${Thread.currentThread().name} ${++counter}")
+                }
+            }
         }
+
+
+}
+
+    private fun createTextView(name: String) {
+        binding.mainContainer.addView(TextView(requireContext()).apply {
+            text = name
+            textSize = 14f
+        })
     }
 
     class  MyThreads : Thread(){
-        lateinit var mHandler: Handler;
+        var mHandler: Handler?=null
         override fun run() {
             Looper.prepare()
             mHandler = Handler(Looper.myLooper()!!)
@@ -74,4 +100,5 @@ class ThreadsFragment : Fragment() {
     }
 
 }
+
 
