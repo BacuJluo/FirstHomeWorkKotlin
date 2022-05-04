@@ -1,14 +1,12 @@
 package com.home.firsthomeworkkotlin.view
 
+import android.content.Intent
 import android.os.Bundle
-import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import com.home.firsthomeworkkotlin.R
+import com.home.firsthomeworkkotlin.lesson6.MainService
 import com.home.firsthomeworkkotlin.lesson6.ThreadsFragment
 import com.home.firsthomeworkkotlin.view.weatherlist.WeatherListFragment
 
@@ -20,7 +18,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction().replace(R.id.container, WeatherListFragment.newInstance()).commit()
         }
 
-
+        startService(Intent(this,MainService::class.java))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
