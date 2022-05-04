@@ -57,6 +57,7 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse, val 
                         }
                         responseCode < responseOk -> {
                             //Смотрящий на главный поток
+                            //Через Handler передаем в Looper (управляющий потоками) новую задачу
                             Handler(Looper.getMainLooper()).post {
                                 onServerResponseListener.onResponse(weatherDTO)
                             }
