@@ -28,6 +28,20 @@ android {
         it.buildConfigField "String", "WEATHER_API_KEY_ERROR", apiKeyError
     }
 
+    buildTypes.each{
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
+        def keyService = properties.getProperty("key_service","")
+        it.buildConfigField "String", "KEY_ONE_HELLO_SERVICE", keyService
+    }
+
+    buildTypes.each{
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
+        def keyBroadcast = properties.getProperty("key_broadcast","")
+        it.buildConfigField "String", "KEY_ONE_BROADCAST", keyBroadcast
+    }
+
     defaultConfig {
         applicationId "com.home.firsthomeworkkotlin"
         minSdk 24
