@@ -1,18 +1,25 @@
 package com.home.firsthomeworkkotlin.view.details
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
-import com.home.firsthomeworkkotlin.R
 import com.home.firsthomeworkkotlin.databinding.FragmentDetailsBinding
 import com.home.firsthomeworkkotlin.datasource.Weather
+import com.home.firsthomeworkkotlin.maintenance.DetailsService
 import com.home.firsthomeworkkotlin.repository.*
-import com.home.firsthomeworkkotlin.utlis.KEY_BUNDLE_WEATHER
+import com.home.firsthomeworkkotlin.utlis.*
 
 class DetailsFragment : Fragment(), OnServerResponse {
+
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding: FragmentDetailsBinding
@@ -23,11 +30,26 @@ class DetailsFragment : Fragment(), OnServerResponse {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        //убиваем регистрацию BroadcastReceiver
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
+    }
+
+    //приемник BroadcastReceiver
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                intent.getParcelableExtra<WeatherDTO>(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER)?.let { it ->
+                    Log.d("@@@", "MyBroadcastReceiver onReceive $it")
+                    onResponse(it)
+                }
+
+            }
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         //return inflater.inflate(R.layout.fragment_main, container, false)
@@ -36,15 +58,28 @@ class DetailsFragment : Fragment(), OnServerResponse {
 
     lateinit var currentCityName: String
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver,
+        IntentFilter(KEY_WAVE_SERVICE_BROADCAST_WEATHER))
         //если агрументы не null то мы их передаем в renderData
         arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
             currentCityName = it.city.name
             //Thread{
-                WeatherLoader(this@DetailsFragment,view).loadWeather(it.city.lat, it.city.lon)
+            //WeatherLoader(this@DetailsFragment, view).loadWeather(it.city.lat, it.city.lon)
             //}.start()
+
+            //Стартуем наш сервис DetailsService
+            requireActivity().startService(Intent(requireContext(),DetailsService::class.java).apply {
+                putExtra(KEY_BUNDLE_LAT,it.city.lat)
+                putExtra(KEY_BUNDLE_LON,it.city.lon)
+            })
         }
+
+
     }
 
 
@@ -69,7 +104,7 @@ class DetailsFragment : Fragment(), OnServerResponse {
     }
 
     private fun conditionValue(weather: WeatherDTO) {
-        when(weather.fact.condition){
+        when (weather.fact.condition) {
             "clear" -> binding.conditionValue.text = "ясно"
             "partly-cloudy" -> binding.conditionValue.text = "малооблачно"
             "cloudy" -> binding.conditionValue.text = "облачно с прояснениями"
@@ -93,7 +128,7 @@ class DetailsFragment : Fragment(), OnServerResponse {
         binding.conditionValue.textSize = 20f
     }
 
-    private fun seasonValue(weather: WeatherDTO){
+    private fun seasonValue(weather: WeatherDTO) {
         when (weather.fact.season) {
             "summer" -> binding.seasonValue.text = "Лето"
             "autumn" -> binding.seasonValue.text = "Осень"
@@ -103,8 +138,8 @@ class DetailsFragment : Fragment(), OnServerResponse {
         binding.seasonValue.textSize = 20f
     }
 
-    private fun dayTimeValue(part: Part){
-        when (part.partName){
+    private fun dayTimeValue(part: Part) {
+        when (part.partName) {
             "night" -> binding.dayTimeValue.text = "Ночь"
             "morning" -> binding.dayTimeValue.text = "Утро"
             "day" -> binding.dayTimeValue.text = "День"

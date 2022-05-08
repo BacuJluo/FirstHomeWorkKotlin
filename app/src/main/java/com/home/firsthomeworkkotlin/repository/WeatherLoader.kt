@@ -7,6 +7,9 @@ import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.home.firsthomeworkkotlin.BuildConfig
+import com.home.firsthomeworkkotlin.utlis.YANDEX_API_KEY
+import com.home.firsthomeworkkotlin.utlis.YANDEX_DOMAIN
+import com.home.firsthomeworkkotlin.utlis.YANDEX_PATH
 import java.io.BufferedReader
 import java.io.FileNotFoundException
 import java.io.InputStreamReader
@@ -17,18 +20,17 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse, val 
 
     fun loadWeather(lat: Double, lon: Double) {
 
-        val urlText = "https://api.weather.yandex.ru/v2/informers?lat=$lat&lon=$lon"
-        val uri = URL(urlText)
-        //посылаем запрос на сервер
-        val urlConnection: HttpsURLConnection =
-            (uri.openConnection() as HttpsURLConnection).apply {
-                connectTimeout = 1000
-                readTimeout = 1000
-                addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY)
-                //addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY_ERROR) //Для проверки ошибки FileNotFoundException
-            }
-
             Thread {
+                val urlText = "$YANDEX_DOMAIN$YANDEX_PATH lat=$lat&lon=$lon"
+                val uri = URL(urlText)
+                //посылаем запрос на сервер
+                val urlConnection: HttpsURLConnection =
+                    (uri.openConnection() as HttpsURLConnection).apply {
+                        connectTimeout = 1000
+                        readTimeout = 1000
+                        addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY)
+                        //addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY_ERROR) //Для проверки ошибки FileNotFoundException
+                    }
                 //коды ошибок
                 val responseCode = urlConnection.responseCode
                 val responseMessage = urlConnection.responseMessage

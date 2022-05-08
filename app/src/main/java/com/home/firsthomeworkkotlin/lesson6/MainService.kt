@@ -18,7 +18,7 @@ class MainService(val name:String = "") : IntentService(name) {
             val message = Intent(KEY_WAVE)//создает ответ (Сервис) на волне myAction
             message.putExtra(KEY_BUNDLE_SERVICE_MESSAGE, "привет активити, и тебе всего хорошего")
             sendBroadcast(message)//отправляет сообщение на глобальный приемник
-            //LocalBroadcastManager.getInstance(this).sendBroadcast(message)//это если мы передаем Локально сообщение
+             //LocalBroadcastManager.getInstance(this).sendBroadcast(message)//это если мы передаем Локально сообщение
         }
     }
 }
