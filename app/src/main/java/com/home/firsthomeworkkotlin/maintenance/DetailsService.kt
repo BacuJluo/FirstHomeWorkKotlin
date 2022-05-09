@@ -3,9 +3,7 @@ package com.home.firsthomeworkkotlin.maintenance
 import android.app.IntentService
 import android.content.Intent
 import android.util.Log
-import android.view.View
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.home.firsthomeworkkotlin.BuildConfig
 import com.home.firsthomeworkkotlin.repository.WeatherDTO
@@ -25,7 +23,7 @@ class DetailsService(val name: String = "") : IntentService(name) {
             Log.d("@@@", "work $lat $lon")
             //Thread.sleep(1000L)
 
-            val urlText = "$YANDEX_DOMAIN$YANDEX_PATH lat=$lat&lon=$lon"
+            val urlText = "$YANDEX_DOMAIN$YANDEX_ENDPOINT lat=$lat&lon=$lon"
             val uri = URL(urlText)
             //посылаем запрос на сервер
             val urlConnection: HttpsURLConnection =
@@ -65,6 +63,7 @@ class DetailsService(val name: String = "") : IntentService(name) {
                     //TODO Сделать через callback
 //                    Snackbar.make(view, "Успешно",
 //                        Snackbar.LENGTH_LONG).show()
+
                 }
             }
             urlConnection.disconnect()
@@ -75,6 +74,7 @@ class DetailsService(val name: String = "") : IntentService(name) {
             message.putExtra(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER, weatherDTO)
             //sendBroadcast(message)//отправляет сообщение на глобальный приемник
             LocalBroadcastManager.getInstance(this).sendBroadcast(message)//это если мы передаем Локально сообщение
+
 
         }
     }

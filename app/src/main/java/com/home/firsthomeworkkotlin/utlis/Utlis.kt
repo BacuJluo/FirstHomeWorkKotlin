@@ -12,6 +12,6 @@ const val KEY_WAVE = "myAction"
 const val KEY_BROADCAST = "keyBroadcast"
 const val KEY_SERVICE = "keyService"
 const val YANDEX_DOMAIN = "https://api.weather.yandex.ru/"
-const val YANDEX_PATH = "v2/informers?"
+const val YANDEX_ENDPOINT = "v2/informers?"
 class Utlis {
 }

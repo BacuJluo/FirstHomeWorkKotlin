@@ -29,7 +29,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.AIRPLANE_MODE" />
-                <action android:name="myaction" />
+                <action android:name="myAction" />
             </intent-filter>
         </receiver>
     </application>

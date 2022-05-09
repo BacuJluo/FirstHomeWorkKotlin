@@ -12,11 +12,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
+import com.home.firsthomeworkkotlin.BuildConfig
 import com.home.firsthomeworkkotlin.databinding.FragmentDetailsBinding
 import com.home.firsthomeworkkotlin.datasource.Weather
 import com.home.firsthomeworkkotlin.maintenance.DetailsService
 import com.home.firsthomeworkkotlin.repository.*
 import com.home.firsthomeworkkotlin.utlis.*
+import okhttp3.*
+import java.io.IOException
 
 class DetailsFragment : Fragment(), OnServerResponse {
 
@@ -38,7 +42,7 @@ class DetailsFragment : Fragment(), OnServerResponse {
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
-                intent.getParcelableExtra<WeatherDTO>(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER)?.let { it ->
+                intent.getParcelableExtra<WeatherDTO>(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER)?.let {
                     Log.d("@@@", "MyBroadcastReceiver onReceive $it")
                     onResponse(it)
                 }
@@ -73,13 +77,43 @@ class DetailsFragment : Fragment(), OnServerResponse {
             //}.start()
 
             //Стартуем наш сервис DetailsService
-            requireActivity().startService(Intent(requireContext(),DetailsService::class.java).apply {
+            requireActivity().startService(Intent(requireContext(), DetailsService::class.java).apply {
                 putExtra(KEY_BUNDLE_LAT,it.city.lat)
                 putExtra(KEY_BUNDLE_LON,it.city.lon)
             })
+            //getWeather(it.city.lat,it.city.lon)
+
         }
 
 
+    }
+
+    private fun getWeather(lat:Double, lon:Double){
+        binding.loadingLayout.visibility = View.VISIBLE
+
+        val client = OkHttpClient()
+        val builder = Request.Builder() //билдер запроса
+        builder.addHeader(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY)
+        builder.url("$YANDEX_DOMAIN$YANDEX_ENDPOINT lat=$lat&lon=$lon")
+        val request = builder.build()
+        val callback: Callback = object : Callback{
+            override fun onFailure(call: Call, e: IOException) {
+                //TODO HW
+                //renderData()
+            }
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful){
+                    val weatherDTO:WeatherDTO = Gson().fromJson(response.body()!!.string(), WeatherDTO::class.java)
+                    requireActivity().runOnUiThread() {
+                        renderData(weatherDTO)
+                    }
+                }else{
+                    //TODO HW
+                }
+            }
+        }
+        val call = client.newCall(request)
+        call.enqueue(callback)
     }
 
 
@@ -162,7 +196,7 @@ class DetailsFragment : Fragment(), OnServerResponse {
     }
 
     override fun onResponse(weatherDTO: WeatherDTO) {
-        renderData(weatherDTO)
+        //renderData(weatherDTO)
 
     }
 }
