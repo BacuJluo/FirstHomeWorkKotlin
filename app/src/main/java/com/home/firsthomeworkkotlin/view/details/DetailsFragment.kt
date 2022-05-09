@@ -16,8 +16,9 @@ import com.google.gson.Gson
 import com.home.firsthomeworkkotlin.BuildConfig
 import com.home.firsthomeworkkotlin.databinding.FragmentDetailsBinding
 import com.home.firsthomeworkkotlin.datasource.Weather
-import com.home.firsthomeworkkotlin.maintenance.DetailsService
 import com.home.firsthomeworkkotlin.repository.*
+import com.home.firsthomeworkkotlin.repository.yandexdto.Part
+import com.home.firsthomeworkkotlin.repository.yandexdto.WeatherDTO
 import com.home.firsthomeworkkotlin.utlis.*
 import okhttp3.*
 import java.io.IOException
@@ -46,7 +47,6 @@ class DetailsFragment : Fragment(), OnServerResponse {
                     Log.d("@@@", "MyBroadcastReceiver onReceive $it")
                     onResponse(it)
                 }
-
             }
         }
     }
@@ -77,11 +77,11 @@ class DetailsFragment : Fragment(), OnServerResponse {
             //}.start()
 
             //Стартуем наш сервис DetailsService
-            requireActivity().startService(Intent(requireContext(), DetailsService::class.java).apply {
+            /*requireActivity().startService(Intent(requireContext(), DetailsService::class.java).apply {
                 putExtra(KEY_BUNDLE_LAT,it.city.lat)
                 putExtra(KEY_BUNDLE_LON,it.city.lon)
-            })
-            //getWeather(it.city.lat,it.city.lon)
+            })*/
+            getWeather(it.city.lat,it.city.lon)
 
         }
 
@@ -93,7 +93,8 @@ class DetailsFragment : Fragment(), OnServerResponse {
 
         val client = OkHttpClient()
         val builder = Request.Builder() //билдер запроса
-        builder.addHeader(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY)
+        //builder.addHeader(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY_FIRST)
+        builder.addHeader(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY_SECOND)
         builder.url("$YANDEX_DOMAIN$YANDEX_ENDPOINT lat=$lat&lon=$lon")
         val request = builder.build()
         val callback: Callback = object : Callback{
@@ -103,8 +104,8 @@ class DetailsFragment : Fragment(), OnServerResponse {
             }
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful){
-                    val weatherDTO:WeatherDTO = Gson().fromJson(response.body()!!.string(), WeatherDTO::class.java)
-                    requireActivity().runOnUiThread() {
+                    val weatherDTO: WeatherDTO = Gson().fromJson(response.body()!!.string(), WeatherDTO::class.java)
+                    requireActivity().runOnUiThread {
                         renderData(weatherDTO)
                     }
                 }else{
@@ -113,7 +114,10 @@ class DetailsFragment : Fragment(), OnServerResponse {
             }
         }
         val call = client.newCall(request)
-        call.enqueue(callback)
+        call.enqueue(callback) // отложенный запрос через callback( + Доп поток) АССИНХРОННЫЙ ЗАПРОС
+        /*Thread{
+            val response = call.execute() // запрос здесь и сейчас без callback (Доп поток) СИНХРОННЫЙ ЗАПРОС
+        }.start()*/
     }
 
 

@@ -17,8 +17,14 @@ android {
     buildTypes.each{
         Properties properties = new Properties()
         properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
-        def apiKey = properties.getProperty("yandex_weather_api_key","")
-        it.buildConfigField "String", "WEATHER_API_KEY", apiKey
+        def apiKey = properties.getProperty("yandex_weather_api_key_first","")
+        it.buildConfigField "String", "WEATHER_API_KEY_FIRST", apiKey
+    }
+    buildTypes.each{
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
+        def apiKey = properties.getProperty("yandex_weather_api_key_second","")
+        it.buildConfigField "String", "WEATHER_API_KEY_SECOND", apiKey
     }
 
     buildTypes.each{

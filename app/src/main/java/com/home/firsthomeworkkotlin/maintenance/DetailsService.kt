@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
 import com.home.firsthomeworkkotlin.BuildConfig
-import com.home.firsthomeworkkotlin.repository.WeatherDTO
+import com.home.firsthomeworkkotlin.repository.yandexdto.WeatherDTO
 import com.home.firsthomeworkkotlin.utlis.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -30,7 +30,8 @@ class DetailsService(val name: String = "") : IntentService(name) {
                 (uri.openConnection() as HttpsURLConnection).apply {
                     connectTimeout = 1000
                     readTimeout = 1000
-                    addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY)
+                    //addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY_FIRST)
+                    addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY_SECOND)
                     //addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY_ERROR) //Для проверки ошибки FileNotFoundException
                 }
             //коды ошибок
