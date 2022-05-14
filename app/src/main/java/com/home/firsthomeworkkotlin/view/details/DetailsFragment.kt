@@ -26,6 +26,7 @@ class DetailsFragment : Fragment(), OnServerResponse {
     }
 
     override fun onCreateView(
+
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
