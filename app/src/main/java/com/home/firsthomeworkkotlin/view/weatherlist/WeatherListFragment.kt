@@ -60,7 +60,9 @@ class WeatherListFragment : Fragment(),OnItemListClickListener {
         /*создание ссылки на ViewModel
         Даже если фрагмент умрет то ViewModel будет жить, и не будет посылать фрагменту запросы
         И если Фрагмент заново пересоздастся, то ViewModel нет, а просто вернет ее по прошлому запросу от ранее созданного фрагмента*/
-        val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        val viewModel:MainViewModel by lazy{
+            ViewModelProvider(this).get(MainViewModel::class.java) //ПОТОКОБЕЗОПАСНЫЙ
+        }
 
         //Callback лайвдэйты
         //меняем Any на собственный AppState.class

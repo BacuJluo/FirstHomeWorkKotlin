@@ -23,8 +23,8 @@ class MainActivityWebView : AppCompatActivity() {
             //посылаем запрос на сервер
             val urlConnection:HttpsURLConnection =
                 (uri.openConnection() as HttpsURLConnection).apply {
-                connectTimeout = 1000
-                readTimeout = 1000
+                /*connectTimeout = 1000
+                readTimeout = 1000*/
             }
             Thread{
                 val headers = urlConnection.headerFields

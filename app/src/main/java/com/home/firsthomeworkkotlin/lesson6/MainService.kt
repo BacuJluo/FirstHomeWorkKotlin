@@ -10,10 +10,10 @@ import java.lang.Thread.sleep
 class MainService(val name:String = "") : IntentService(name) {
 
     override fun onHandleIntent(intent: Intent?) {
-        Log.d("@@@", "work MainService")//после создания сервис получает привет от активити
+        Log.d("@@@", "work MainService 1")//после создания сервис получает привет от активити
         intent?.let {
             val extra = it.getStringExtra(KEY_BUNDLE_ACTIVITY_MESSAGE)
-            Log.d("@@@", "work MainService $extra")
+            Log.d("@@@", "work MainService 1 $extra")
             sleep(1000L)
             val message = Intent(KEY_WAVE)//создает ответ (Сервис) на волне myAction
             message.putExtra(KEY_BUNDLE_SERVICE_MESSAGE, "привет активити, и тебе всего хорошего")

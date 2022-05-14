@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         val receiver = MyBroadcastReceiver()
         //регистрация приемника на волну myAction
         registerReceiver(receiver, IntentFilter(KEY_WAVE)) //глобальный уровень броадкастресивера
-        //LocalBroadcastManager.getInstance(this).registerReceiver() //локальный уровень броадкастресивера
+        //LocalBroadcastManager.getInstance(this).registerReceiver(receiver, IntentFilter(KEY_WAVE)) //локальный уровень броадкастресивера
 
     }
 
