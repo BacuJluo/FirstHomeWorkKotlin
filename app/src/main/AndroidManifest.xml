@@ -18,12 +18,12 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <service android:name=".lesson6.MainService" />
+        <service android:name=".view.details.DetailsService" />
         <receiver android:name=".lesson6.MyBroadcastReceiver"
             android:exported="true">
             <intent-filter>
