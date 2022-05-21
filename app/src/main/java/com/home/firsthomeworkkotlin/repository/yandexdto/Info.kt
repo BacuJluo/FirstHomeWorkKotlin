@@ -1,4 +1,4 @@
-package com.home.firsthomeworkkotlin.repository.yandexdto
+package com.home.firsthomeworkkotlin.repository
 
 
 import android.os.Parcelable
@@ -13,4 +13,4 @@ data class Info(
     val lon: Double,
     @SerializedName("url")
     val url: String
-): Parcelable
+):Parcelable

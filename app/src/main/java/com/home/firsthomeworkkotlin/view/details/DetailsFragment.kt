@@ -1,25 +1,24 @@
 package com.home.firsthomeworkkotlin.view.details
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
+import com.home.firsthomeworkkotlin.R
 import com.home.firsthomeworkkotlin.databinding.FragmentDetailsBinding
 import com.home.firsthomeworkkotlin.datasource.Weather
-import com.home.firsthomeworkkotlin.repository.OnServerResponse
-import com.home.firsthomeworkkotlin.repository.yandexdto.Part
-import com.home.firsthomeworkkotlin.repository.yandexdto.WeatherDTO
-import com.home.firsthomeworkkotlin.utlis.KEY_BUNDLE_WEATHER
-import com.home.firsthomeworkkotlin.viewmodel.DetailsState
-import com.home.firsthomeworkkotlin.viewmodel.DetailsViewModel
+import com.home.firsthomeworkkotlin.repository.*
+import com.home.firsthomeworkkotlin.utlis.*
 
-class DetailsFragment : Fragment() {
-
+class DetailsFragment : Fragment(), OnServerResponse {
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding: FragmentDetailsBinding
@@ -30,73 +29,77 @@ class DetailsFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
     }
 
-
+    //Приемник
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                intent.getParcelableExtra<WeatherDTO>(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER)?.let{
+                    Log.d("@@@", "MyBroadcastReceiver onReceive $it")
+                    onResponse(it)
+                }
+            }
+        }
+    }
 
     override fun onCreateView(
+
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         //return inflater.inflate(R.layout.fragment_main, container, false)
         return binding.root
     }
 
-    private val viewModel: DetailsViewModel by lazy{
-        ViewModelProvider(this).get(DetailsViewModel::class.java) //ПОТОКОБЕЗОПАСНЫЙ
-    }
+    private lateinit var currentCityName: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getLiveData().observe(viewLifecycleOwner,object:Observer<DetailsState>{
-            override fun onChanged(t: DetailsState) {
-                renderData(t)
-                //Log.d("@@@", "$t")
-            }
 
-        })
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver,
+            IntentFilter(KEY_WAVE_SERVICE_BROADCAST))
 
         //если агрументы не null то мы их передаем в renderData
         arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
-            viewModel.getWeather(it.city)
-            //Log.d("@@@", "${it.city}")
+            currentCityName = it.city.name
+            //Thread{
+            //WeatherLoader(this@DetailsFragment,view).loadWeather(it.city.lat, it.city.lon)
+            //}.start()
+            requireActivity().startService(Intent(requireContext(),DetailsService::class.java).apply {
+                putExtra(KEY_BUNDLE_LAT,it.city.lat)
+                putExtra(KEY_BUNDLE_LON,it.city.lon)
+                putExtra(KEY_BUNDLE_CITY,it.city.name)
+
+            })
         }
     }
 
-    private fun renderData(detailsState: DetailsState) {
-        when(detailsState){
-            is DetailsState.Error -> {
-                //TODO HW
-            }
-            DetailsState.Loading -> {
-                //TODO HW
-            }
-            is DetailsState.Success -> {
-                val weather = detailsState.weather
-                with(binding) {
-                    loadingLayout.visibility = View.GONE
-                    cityName.text = weather.city.name
-                    //dayTimeValue(weather.forecast.parts[0])
-                    //seasonValue(weather)
-                    //conditionValue(weather)
-                    temperatureValue.text = weather.temperature.toString()
-                    feelsLikeValue.text = weather.feelsLike.toString()
-                    cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
-                    //Toast.makeText(requireContext(),"РАБОТАЕТ",Toast.LENGTH_SHORT).show()
-                    //mainView.withOutAction(getString(R.string.success))
-                    /*mainView.snackBarWithAction(
-                        getString(R.string.error), getString(R.string.try_again), { sentRequest() },
-                        Snackbar.LENGTH_LONG
-                    )*/
 
-                }
-            }
+    private fun renderData(weather: WeatherDTO) {
+        with(binding) {
+            loadingLayout.visibility = View.GONE
+            cityName.text = currentCityName
+            dayTimeValue(weather.forecast.parts[0])
+            seasonValue(weather)
+            conditionValue(weather)
+            temperatureValue.text = weather.fact.temperature.toString()
+            feelsLikeValue.text = weather.fact.feelsLike.toString()
+
+            "${weather.info.lat} ${weather.info.lon}".apply { cityCoordinates.text = this }
+            //Toast.makeText(requireContext(),"РАБОТАЕТ",Toast.LENGTH_SHORT).show()
+            //mainView.withOutAction(getString(R.string.success))
+            /*mainView.snackBarWithAction(
+                getString(R.string.error), getString(R.string.try_again), { sentRequest() },
+                Snackbar.LENGTH_LONG
+            )*/
         }
     }
 
     private fun conditionValue(weather: WeatherDTO) {
-        when (weather.fact.condition) {
+        when(weather.fact.condition){
             "clear" -> binding.conditionValue.text = "ясно"
             "partly-cloudy" -> binding.conditionValue.text = "малооблачно"
             "cloudy" -> binding.conditionValue.text = "облачно с прояснениями"
@@ -120,7 +123,7 @@ class DetailsFragment : Fragment() {
         binding.conditionValue.textSize = 20f
     }
 
-    private fun seasonValue(weather: WeatherDTO) {
+    private fun seasonValue(weather: WeatherDTO){
         when (weather.fact.season) {
             "summer" -> binding.seasonValue.text = "Лето"
             "autumn" -> binding.seasonValue.text = "Осень"
@@ -130,8 +133,8 @@ class DetailsFragment : Fragment() {
         binding.seasonValue.textSize = 20f
     }
 
-    private fun dayTimeValue(part: Part) {
-        when (part.partName) {
+    private fun dayTimeValue(part: Part){
+        when (part.partName){
             "night" -> binding.dayTimeValue.text = "Ночь"
             "morning" -> binding.dayTimeValue.text = "Утро"
             "day" -> binding.dayTimeValue.text = "День"
@@ -151,6 +154,10 @@ class DetailsFragment : Fragment() {
             fragment.arguments = bundle
             return fragment
         }
+    }
+
+    override fun onResponse(weatherDTO: WeatherDTO) {
+        renderData(weatherDTO)
     }
 
 }

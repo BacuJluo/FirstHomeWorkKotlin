@@ -1,4 +1,4 @@
-package com.home.firsthomeworkkotlin.repository.yandexdto
+package com.home.firsthomeworkkotlin.repository
 
 
 import android.os.Parcelable
@@ -43,4 +43,4 @@ data class Part(
     val windGust: Double,
     @SerializedName("wind_speed")
     val windSpeed: Double
-): Parcelable
+):Parcelable

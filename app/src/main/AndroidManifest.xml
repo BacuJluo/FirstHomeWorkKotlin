@@ -24,12 +24,11 @@
         </activity>
 
         <service android:name=".lesson6.MainService" />
-        <service android:name=".maintenance.DetailsService" />
         <receiver android:name=".lesson6.MyBroadcastReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.AIRPLANE_MODE" />
-                <action android:name="myAction" />
+                <action android:name="android.intent.action.AIRPLANE_MODE_CHANGE" />
+                <action android:name="myaction" />
             </intent-filter>
         </receiver>
     </application>
