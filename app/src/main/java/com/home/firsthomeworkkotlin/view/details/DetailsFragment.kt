@@ -12,10 +12,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.snackbar.Snackbar
-import com.home.firsthomeworkkotlin.R
 import com.home.firsthomeworkkotlin.databinding.FragmentDetailsBinding
 import com.home.firsthomeworkkotlin.datasource.Weather
 import com.home.firsthomeworkkotlin.repository.*
+import com.home.firsthomeworkkotlin.repository.yandexdto.WeatherDTO
 import com.home.firsthomeworkkotlin.utlis.*
 
 class DetailsFragment : Fragment(), OnServerResponse {

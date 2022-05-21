@@ -2,7 +2,7 @@ package com.home.firsthomeworkkotlin.utlis
 
 const val KEY_BUNDLE_WEATHER = "key"
 
-const val YANDEX_PATH = "v2/informers?"
+const val YANDEX_ENDPOINT = "v2/informers?"
 const val YANDEX_DOMAIN = "https://api.weather.yandex.ru/"
 const val YANDEX_API_KEY = "X-Yandex-API-Key"
 

@@ -71,7 +71,7 @@ class DetailsService(val name: String = "") : IntentService(name) {
             Log.d("@@@", "Закрыли коннект")
 
 
-            val message = Intent(KEY_WAVE_SERVICE_BROADCAST_WEATHER)//создает ответ (Сервис) на волне myAction
+            val message = Intent(KEY_WAVE_SERVICE_BROADCAST)//создает ответ (Сервис) на волне myAction
             message.putExtra(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER, weatherDTO)
             //sendBroadcast(message)//отправляет сообщение на глобальный приемник
             LocalBroadcastManager.getInstance(this).sendBroadcast(message)//это если мы передаем Локально сообщение
