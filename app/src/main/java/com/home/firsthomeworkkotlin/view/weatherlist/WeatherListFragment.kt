@@ -10,12 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.home.firsthomeworkkotlin.R
 import com.home.firsthomeworkkotlin.databinding.FragmentWeatherListBinding
-import com.home.firsthomeworkkotlin.datasource.Weather
 import com.home.firsthomeworkkotlin.utlis.KEY_BUNDLE_WEATHER
 import com.home.firsthomeworkkotlin.view.details.DetailsFragment
 import com.home.firsthomeworkkotlin.viewmodel.AppState
 import com.home.firsthomeworkkotlin.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.home.firsthomeworkkotlin.repository.Weather
 
 class WeatherListFragment : Fragment(),OnItemListClickListener {
 

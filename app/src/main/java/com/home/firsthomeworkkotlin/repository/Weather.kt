@@ -1,4 +1,4 @@
-package com.home.firsthomeworkkotlin.datasource
+package com.home.firsthomeworkkotlin.repository
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
@@ -8,7 +8,7 @@ import kotlinx.android.parcel.Parcelize
 data class Weather(var city: City = getDefaultCity(), val temperature:Int=0, val feelsLike:Int=0):Parcelable
 //FIXME Добавить другие значения, такие как (день,ночь или вечер),(время года),(состояние погоды(пасмурно,ясно)) - ПО ЖЕЛАНИЮ
 
-fun getDefaultCity() = City("", 55.00835259999999, 82.93573270000002)
+fun getDefaultCity() = City("Санкт-Петербург", 59.9342802, 30.335098600000038)
 
 @Parcelize
 data class City(val name:String,val lat:Double,val lon:Double):Parcelable

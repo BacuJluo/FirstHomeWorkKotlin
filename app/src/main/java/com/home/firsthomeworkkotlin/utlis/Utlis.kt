@@ -1,5 +1,11 @@
 package com.home.firsthomeworkkotlin.utlis
 
+import android.util.Log
+import com.home.firsthomeworkkotlin.repository.Weather
+import com.home.firsthomeworkkotlin.repository.getDefaultCity
+import com.home.firsthomeworkkotlin.repository.yandexdto.Fact
+import com.home.firsthomeworkkotlin.repository.yandexdto.WeatherDTO
+
 const val KEY_BUNDLE_WEATHER = "key"
 
 const val YANDEX_ENDPOINT = "v2/informers?"
@@ -18,4 +24,10 @@ const val KEY_WAVE = "myaction"
 const val KEY_BROADCAST = "keyBroadcast"
 const val KEY_SERVICE = "keyService"
 class Utlis {
+}
+
+fun convertDtoToModel(weatherDTO: WeatherDTO): Weather {
+    val fact: Fact = weatherDTO.fact
+    Log.d("@@@","${fact.temperature} - ${fact.feelsLike} - Фактическое")
+    return (Weather(getDefaultCity(),fact.temperature,fact.feelsLike))
 }

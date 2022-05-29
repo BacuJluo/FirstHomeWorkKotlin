@@ -1,24 +1,21 @@
 package com.home.firsthomeworkkotlin.view.details
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.home.firsthomeworkkotlin.databinding.FragmentDetailsBinding
-import com.home.firsthomeworkkotlin.datasource.Weather
-import com.home.firsthomeworkkotlin.repository.*
+import com.home.firsthomeworkkotlin.repository.Weather
+import com.home.firsthomeworkkotlin.repository.yandexdto.Part
 import com.home.firsthomeworkkotlin.repository.yandexdto.WeatherDTO
-import com.home.firsthomeworkkotlin.utlis.*
+import com.home.firsthomeworkkotlin.utlis.KEY_BUNDLE_WEATHER
+import com.home.firsthomeworkkotlin.viewmodel.DetailsState
+import com.home.firsthomeworkkotlin.viewmodel.DetailsViewModel
 
-class DetailsFragment : Fragment(), OnServerResponse {
+class DetailsFragment : Fragment() {
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding: FragmentDetailsBinding
@@ -29,11 +26,11 @@ class DetailsFragment : Fragment(), OnServerResponse {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
+        /*LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)*/ //Снятие регистрации броадкастресивера (локального)
     }
 
     //Приемник
-    private val receiver = object : BroadcastReceiver() {
+    /*private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
                 intent.getParcelableExtra<WeatherDTO>(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER)?.let{
@@ -42,7 +39,7 @@ class DetailsFragment : Fragment(), OnServerResponse {
                 }
             }
         }
-    }
+    }*/
 
     override fun onCreateView(
 
@@ -54,48 +51,117 @@ class DetailsFragment : Fragment(), OnServerResponse {
         return binding.root
     }
 
-    private lateinit var currentCityName: String
+    private val viewModel: DetailsViewModel by lazy{
+        ViewModelProvider(this).get(DetailsViewModel::class.java) //ПОТОКОБЕЗОПАСНЫЙ
+    }
+
+    //private lateinit var currentCityName: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver,
-            IntentFilter(KEY_WAVE_SERVICE_BROADCAST))
+        viewModel.getLiveData().observe(viewLifecycleOwner) { t -> renderData(t) }
+
+
+        /*LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver,
+            IntentFilter(KEY_WAVE_SERVICE_BROADCAST))*/ //Регистрация сервиса БроадКаст Ресивер (Локальный)
 
         //если агрументы не null то мы их передаем в renderData
         arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
-            currentCityName = it.city.name
-            //Thread{
-            //WeatherLoader(this@DetailsFragment,view).loadWeather(it.city.lat, it.city.lon)
-            //}.start()
+//            currentCityName = it.city.name
+
+            viewModel.getWeather(it.city)
+
+            /*Thread{
+            WeatherLoader(this@DetailsFragment,view).loadWeather(it.city.lat, it.city.lon)
+            }.start()
             requireActivity().startService(Intent(requireContext(),DetailsService::class.java).apply {
                 putExtra(KEY_BUNDLE_LAT,it.city.lat)
                 putExtra(KEY_BUNDLE_LON,it.city.lon)
                 putExtra(KEY_BUNDLE_CITY,it.city.name)
+            })*/
+            //getWeather(it.city.lat,it.city.lon)
 
-            })
+
         }
+
+
     }
 
+    /*private fun getWeather(lat:Double,lon:Double){
+        binding.loadingLayout.visibility = View.VISIBLE //renderData(Loading) - сделать состояние загрузки
 
-    private fun renderData(weather: WeatherDTO) {
-        with(binding) {
-            loadingLayout.visibility = View.GONE
-            cityName.text = currentCityName
-            dayTimeValue(weather.forecast.parts[0])
-            seasonValue(weather)
-            conditionValue(weather)
-            temperatureValue.text = weather.fact.temperature.toString()
-            feelsLikeValue.text = weather.fact.feelsLike.toString()
+        val client = OkHttpClient()
+        val builder = Request.Builder()
+        builder.addHeader(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY_FIRST)
+        builder.url("$YANDEX_DOMAIN${YANDEX_ENDPOINT}lat=$lat&lon=$lon")
+        val request = builder.build()
+        val callback: Callback = object : Callback{
+            override fun onFailure(call: Call, e: IOException) {
+                TODO("renderData() Если ошибка")
+            }
 
-            "${weather.info.lat} ${weather.info.lon}".apply { cityCoordinates.text = this }
-            //Toast.makeText(requireContext(),"РАБОТАЕТ",Toast.LENGTH_SHORT).show()
-            //mainView.withOutAction(getString(R.string.success))
-            /*mainView.snackBarWithAction(
-                getString(R.string.error), getString(R.string.try_again), { sentRequest() },
-                Snackbar.LENGTH_LONG
-            )*/
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful){
+                    val weatherDTO:WeatherDTO = Gson().fromJson(response.body()!!.string(),WeatherDTO::class.java)
+                    requireActivity().runOnUiThread {
+                        renderData(weatherDTO)
+                    }
+                }else{
+                    //TODO HW response.isRedirect
+                }
+            }
         }
+
+        val call = client.newCall(request)
+        call.enqueue(callback) //enqueue Выполнить в очереди ассинхронный способ запроса для него нужен Callback
+        Thread{
+            val response = call.execute() //execute Выполнить здесь и сейчас, синхронный способ запроса
+            if (response.isSuccessful){
+
+                val weatherDTO:WeatherDTO = Gson().fromJson(response.body()!!.string(),WeatherDTO::class.java)
+                requireActivity().runOnUiThread {
+                    renderData(weatherDTO)
+                }
+            }else{
+                //TODO HW response.isRedirect
+            }
+        }.start()
+    }*/
+
+
+    private fun renderData(detailsState: DetailsState) {
+        when(detailsState){
+            is DetailsState.Error -> {
+
+            }
+            DetailsState.Loading -> {
+
+            }
+            is DetailsState.Success -> {
+                val weather = detailsState.weather
+
+                with(binding) {
+                    loadingLayout.visibility = View.GONE
+                    cityName.text = weather.city.name
+//                    dayTimeValue(weather.parts[0])
+//                    seasonValue(weather)
+//                    conditionValue(weather)
+                    temperatureValue.text = weather.temperature.toString()
+                    feelsLikeValue.text = weather.feelsLike.toString()
+                    cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
+
+                    //"${weather.city.lat} ${weather.city.lon}".apply { cityCoordinates.text = this }
+                    /*//Toast.makeText(requireContext(),"РАБОТАЕТ",Toast.LENGTH_SHORT).show()
+                    //mainView.withOutAction(getString(R.string.success))
+                    mainView.snackBarWithAction(
+                        getString(R.string.error), getString(R.string.try_again), { sentRequest() },
+                        Snackbar.LENGTH_LONG
+                    )*/
+                }
+            }
+        }
+
     }
 
     private fun conditionValue(weather: WeatherDTO) {
@@ -156,9 +222,9 @@ class DetailsFragment : Fragment(), OnServerResponse {
         }
     }
 
-    override fun onResponse(weatherDTO: WeatherDTO) {
-        renderData(weatherDTO)
-    }
+//    override fun onResponse(weatherDTO: WeatherDTO) {
+//        renderData(weatherDTO)
+//    }
 
 }
 

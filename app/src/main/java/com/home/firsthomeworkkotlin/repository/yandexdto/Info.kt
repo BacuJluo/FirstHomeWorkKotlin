@@ -1,4 +1,4 @@
-package com.home.firsthomeworkkotlin.repository
+package com.home.firsthomeworkkotlin.repository.yandexdto
 
 
 import android.os.Parcelable

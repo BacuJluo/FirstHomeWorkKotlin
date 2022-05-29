@@ -1,11 +1,12 @@
 package com.home.firsthomeworkkotlin.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.home.firsthomeworkkotlin.datasource.City
-import com.home.firsthomeworkkotlin.datasource.Weather
+import com.home.firsthomeworkkotlin.repository.City
 import com.home.firsthomeworkkotlin.repository.DetailsRepository
 import com.home.firsthomeworkkotlin.repository.DetailsRepositoryOkHttpImplementation
+import com.home.firsthomeworkkotlin.repository.Weather
 
 class DetailsViewModel(
     private val liveData: MutableLiveData<DetailsState> = MutableLiveData(),

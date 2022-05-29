@@ -2,13 +2,11 @@ package com.home.firsthomeworkkotlin.view.details
 
 import android.app.IntentService
 import android.content.Intent
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
 import com.home.firsthomeworkkotlin.BuildConfig
-import com.home.firsthomeworkkotlin.repository.WeatherDTO
+import com.home.firsthomeworkkotlin.repository.yandexdto.WeatherDTO
 import com.home.firsthomeworkkotlin.utlis.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -27,14 +25,16 @@ class DetailsService(val name: String = "") : IntentService(name) {
             Log.d("@@@", "work DetailsService $lat $lon $city")
 
 
-            val urlText = "$YANDEX_DOMAIN${YANDEX_PATH}lat=$lat&lon=$lon"
+            val urlText = "$YANDEX_DOMAIN${YANDEX_ENDPOINT}lat=$lat&lon=$lon"
             val uri = URL(urlText)
             //посылаем запрос на сервер
             val urlConnection: HttpsURLConnection =
                 (uri.openConnection() as HttpsURLConnection).apply {
                     connectTimeout = 1000
                     readTimeout = 1000
-                    addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY)
+                    addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY_FIRST) //1ключ
+                    //addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY_SECOND) //2ключ
+
                     //addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY_ERROR) //Для проверки ошибки FileNotFoundException
                 }
 

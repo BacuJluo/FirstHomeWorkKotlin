@@ -6,21 +6,14 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.work.ListenableWorker
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.WorkRequest
 import com.home.firsthomeworkkotlin.BuildConfig
 import com.home.firsthomeworkkotlin.R
 import com.home.firsthomeworkkotlin.lesson6.MainService
 import com.home.firsthomeworkkotlin.lesson6.MyBroadcastReceiver
 import com.home.firsthomeworkkotlin.lesson6.ThreadsFragment
 import com.home.firsthomeworkkotlin.utlis.KEY_BUNDLE_ACTIVITY_MESSAGE
-import com.home.firsthomeworkkotlin.utlis.KEY_SERVICE
 import com.home.firsthomeworkkotlin.utlis.KEY_WAVE
 import com.home.firsthomeworkkotlin.view.weatherlist.WeatherListFragment
-import kotlin.time.Duration.Companion.minutes
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -8,6 +8,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.home.firsthomeworkkotlin.BuildConfig
+import com.home.firsthomeworkkotlin.repository.yandexdto.WeatherDTO
 import java.io.BufferedReader
 import java.io.FileNotFoundException
 import java.io.InputStreamReader
@@ -27,7 +28,8 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse, val 
                 (uri.openConnection() as HttpsURLConnection).apply {
                     connectTimeout = 1000
                     readTimeout = 1000
-                    addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY)
+                    addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY_FIRST)
+                    //addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY_SECOND)
                     //addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY_ERROR) //Для проверки ошибки FileNotFoundException
                 }
 
