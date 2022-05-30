@@ -3,10 +3,7 @@ package com.home.firsthomeworkkotlin.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.home.firsthomeworkkotlin.repository.City
-import com.home.firsthomeworkkotlin.repository.DetailsRepository
-import com.home.firsthomeworkkotlin.repository.DetailsRepositoryOkHttpImplementation
-import com.home.firsthomeworkkotlin.repository.Weather
+import com.home.firsthomeworkkotlin.repository.*
 
 class DetailsViewModel(
     private val liveData: MutableLiveData<DetailsState> = MutableLiveData(),
@@ -19,6 +16,7 @@ class DetailsViewModel(
         liveData.postValue(DetailsState.Loading)
         repository.getWeatherDetails(city,object : Callback{
             override fun onResponse(weather: Weather) {
+                Log.d("@@@","Details - $weather")
                 liveData.postValue(DetailsState.Success(weather))
             }
         })

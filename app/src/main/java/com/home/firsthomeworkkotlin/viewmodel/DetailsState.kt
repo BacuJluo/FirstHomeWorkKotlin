@@ -7,7 +7,7 @@ import com.home.firsthomeworkkotlin.repository.Weather
 sealed class DetailsState {
 
     object Loading:DetailsState()
-    data class Success(val weather : Weather) : DetailsState()
+    data class Success(var weather : Weather) : DetailsState()
     data class Error(val error:Throwable):DetailsState()
 
 }

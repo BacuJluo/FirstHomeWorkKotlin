@@ -13,6 +13,7 @@ import java.io.InputStreamReader
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
+/*
 class DetailsService(val name: String = "") : IntentService(name) {
 
     @Deprecated("Deprecated in Java")
@@ -32,7 +33,7 @@ class DetailsService(val name: String = "") : IntentService(name) {
                 (uri.openConnection() as HttpsURLConnection).apply {
                     connectTimeout = 1000
                     readTimeout = 1000
-                    addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY_FIRST) //1ключ
+                    //addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY_FIRST) //1ключ
                     //addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY_SECOND) //2ключ
 
                     //addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY_ERROR) //Для проверки ошибки FileNotFoundException
@@ -54,18 +55,20 @@ class DetailsService(val name: String = "") : IntentService(name) {
 
                 }
                 responseCode >= clientSide -> {
-                    /*make1(this, //TODO попробовть разобраться с SnackBar
+                    */
+/*make1(this, //TODO попробовть разобраться с SnackBar
                             "Упс. Что-то пошло не так..\n$responseMessage ошибка клиента",
-                            Snackbar.LENGTH_LONG).show()*/
+                            Snackbar.LENGTH_LONG).show()*//*
+
                 }
                 responseCode < responseOk -> {
                     //Буфферизация обращения к серверу
                     val buffer = BufferedReader(InputStreamReader(urlConnection.inputStream))
-                    val weatherDTO: WeatherDTO = Gson().fromJson(buffer, WeatherDTO::class.java)
+                    //val weatherDTO: WeatherDTO = Gson().fromJson(buffer, WeatherDTO::class.java)
 
 
                     val message = Intent(KEY_WAVE_SERVICE_BROADCAST)//создает ответ (Сервис) на волне myAction
-                    message.putExtra(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER, weatherDTO)
+                    //message.putExtra(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER, weatherDTO)
 
                     //sendBroadcast(message)//отправляет сообщение на глобальный приемник
                     LocalBroadcastManager.getInstance(this).sendBroadcast(message)//это если мы передаем Локально сообщение
@@ -74,4 +77,4 @@ class DetailsService(val name: String = "") : IntentService(name) {
             }
         }
     }
-}
+}*/

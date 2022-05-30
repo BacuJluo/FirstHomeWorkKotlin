@@ -15,27 +15,34 @@ import java.io.InputStreamReader
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
+/*
 class WeatherLoader(private val onServerResponseListener: OnServerResponse, val view: View) {
 
     fun loadWeather(lat: Double, lon: Double) {
 
-        val urlText = "https://api.weather.yandex.ru/v2/informers?lat=$lat&lon=$lon"
-        val uri = URL(urlText)
+        */
+/*val urlText = "https://api.weather.yandex.ru/v2/informers?lat=$lat&lon=$lon"
+        val uri = URL(urlText)*//*
+
 
         Thread {
             //посылаем запрос на сервер
-            val urlConnection: HttpsURLConnection =
+            */
+/*val urlConnection: HttpsURLConnection =
                 (uri.openConnection() as HttpsURLConnection).apply {
                     connectTimeout = 1000
                     readTimeout = 1000
-                    addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY_FIRST)
+                    //addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY_FIRST)
                     //addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY_SECOND)
                     //addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY_ERROR) //Для проверки ошибки FileNotFoundException
-                }
+                }*//*
+
 
             //коды ошибок
-            val responseCode = urlConnection.responseCode
-            val responseMessage = urlConnection.responseMessage
+            */
+/*val responseCode = urlConnection.responseCode
+            val responseMessage = urlConnection.responseMessage*//*
+
 
             try {
                 //Буфферизация обращения к серверу
@@ -55,12 +62,12 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse, val 
 
                     }
                     in responseOk -> {
-                        val buffer = BufferedReader(InputStreamReader(urlConnection.inputStream))
-                        val weatherDTO: WeatherDTO = Gson().fromJson(buffer, WeatherDTO::class.java)
+                        //val buffer = BufferedReader(InputStreamReader(urlConnection.inputStream))
+                        //val weatherDTO: WeatherDTO = Gson().fromJson(buffer, WeatherDTO::class.java)
                         //Смотрящий на главный поток
                         //Через Handler передаем в Looper (управляющий потоками) новую задачу
                         Handler(Looper.getMainLooper()).post {
-                            onServerResponseListener.onResponse(weatherDTO)
+                            //onServerResponseListener.onResponse(weatherDTO)
                         }
                         Snackbar.make(view, "Успешно",
                             Snackbar.LENGTH_LONG).show()
@@ -86,4 +93,4 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse, val 
         }.start()
 
     }
-}
+}*/

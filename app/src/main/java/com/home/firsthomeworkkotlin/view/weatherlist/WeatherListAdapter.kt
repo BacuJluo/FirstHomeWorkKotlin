@@ -1,11 +1,15 @@
 package com.home.firsthomeworkkotlin.view.weatherlist
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.home.firsthomeworkkotlin.R
 import com.home.firsthomeworkkotlin.databinding.FragmentWeatherListRecyclerItemBinding
 import com.home.firsthomeworkkotlin.repository.Weather
+import com.home.firsthomeworkkotlin.view.MainActivity
+import com.home.firsthomeworkkotlin.view.details.DetailsFragment
 
 class WeatherListAdapter(
     private val onItemListClickListener: OnItemListClickListener,
@@ -27,7 +31,7 @@ class WeatherListAdapter(
     }
 
     override fun onBindViewHolder(holder: CityHolder, position: Int) {
-        holder.bind(data.get(position))
+        holder.bind(data[position])
     }
 
     override fun getItemCount() = data.size
@@ -38,7 +42,8 @@ class WeatherListAdapter(
                 tvCityName.text = weather.city.name
                 root.setOnClickListener {
                     onItemListClickListener.onItemClick(weather)
-                    //(itemView.context as MainActivity).supportFragmentManager.beginTransaction().add(R.id.container,DetailsFragment.newInstance())
+                    /*(itemView.context as MainActivity).supportFragmentManager.beginTransaction().add(
+                        R.id.container, DetailsFragment.newInstance(bundle = Bundle()))*/
                 }
             }
         }

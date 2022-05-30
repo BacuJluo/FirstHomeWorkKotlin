@@ -12,14 +12,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <!--<androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/edTextUrl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="textUri"
-            android:text="https://geekbrains.ru/"/>
+            android:inputType="textUri"/>-->
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/ok"

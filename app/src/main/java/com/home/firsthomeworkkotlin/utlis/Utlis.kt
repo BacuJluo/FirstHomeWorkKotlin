@@ -6,7 +6,7 @@ import com.home.firsthomeworkkotlin.repository.getDefaultCity
 import com.home.firsthomeworkkotlin.repository.yandexdto.Fact
 import com.home.firsthomeworkkotlin.repository.yandexdto.WeatherDTO
 
-const val KEY_BUNDLE_WEATHER = "key"
+const val KEY_BUNDLE_WEATHER = "weather"
 
 const val YANDEX_ENDPOINT = "v2/informers?"
 const val YANDEX_DOMAIN = "https://api.weather.yandex.ru/"

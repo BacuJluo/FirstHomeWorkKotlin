@@ -1,6 +1,7 @@
 package com.home.firsthomeworkkotlin.view.details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -149,6 +150,7 @@ class DetailsFragment : Fragment() {
 //                    conditionValue(weather)
                     temperatureValue.text = weather.temperature.toString()
                     feelsLikeValue.text = weather.feelsLike.toString()
+                    Log.d("@@@","${weather.city.lat} ${weather.city.lon}")
                     cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
 
                     //"${weather.city.lat} ${weather.city.lon}".apply { cityCoordinates.text = this }
