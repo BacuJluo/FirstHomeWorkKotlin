@@ -7,7 +7,8 @@ import com.home.firsthomeworkkotlin.repository.*
 
 class DetailsViewModel(
     private val liveData: MutableLiveData<DetailsState> = MutableLiveData(),
-    private var repository: DetailsRepository = DetailsRepositoryOkHttpImplementation()
+    //private var repository: DetailsRepository = DetailsRepositoryOkHttpImplementation()
+    private val repository: DetailsRepository = DetailsRepositoryRetrofit2Implementation()
 ) : ViewModel() {
 
     fun getLiveData() = liveData //возвращает livedata

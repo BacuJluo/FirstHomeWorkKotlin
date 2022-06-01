@@ -137,7 +137,7 @@ class DetailsFragment : Fragment() {
 
             }
             DetailsState.Loading -> {
-
+                //TODO HW Loading
             }
             is DetailsState.Success -> {
                 val weather = detailsState.weather
