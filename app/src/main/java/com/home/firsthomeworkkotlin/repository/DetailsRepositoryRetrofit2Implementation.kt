@@ -14,20 +14,25 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class DetailsRepositoryRetrofit2Implementation:DetailsRepository {
     override fun getWeatherDetails(city: City, callbackMy: DetailsViewModel.Callback) {
+        //Оживление Ретрофита
         val weatherAPI = Retrofit.Builder().apply {
             baseUrl(YANDEX_DOMAIN)
             addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
         }.build().create(WeatherAPI::class.java)
-        //val response = weatherAPI.getWeather(BuildConfig.WEATHER_API_KEY_FIRST,city.lat,city.lon).execute()
+
+        //val response = weatherAPI.getWeather(BuildConfig.WEATHER_API_KEY_FIRST,city.lat,city.lon).execute() //Выполнение запроса здесь и сейчас (синхронно)
+
+        //Выполнение запроса через Callback (асинхронно)
         weatherAPI.getWeather(BuildConfig.WEATHER_API_KEY_FIRST,city.lat,city.lon).enqueue(object : Callback<WeatherDTO>{
             override fun onResponse(call: Call<WeatherDTO>, response: Response<WeatherDTO>) {
                 if(response.isSuccessful){
                     response.body()?.let {
-                        callbackMy.onResponse(convertDtoToModel(it))
+                        val weather = convertDtoToModel(it)
+                        weather.city = city
+                        callbackMy.onResponse(weather)
                     }
                 }
             }
-
             override fun onFailure(call: Call<WeatherDTO>, t: Throwable) {
                 //TODO HW
             }

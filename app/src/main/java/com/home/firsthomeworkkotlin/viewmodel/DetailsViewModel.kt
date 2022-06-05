@@ -20,12 +20,16 @@ class DetailsViewModel(
                 Log.d("@@@","Details - $weather")
                 liveData.postValue(DetailsState.Success(weather))
             }
+
+            override fun onFail() {
+                //TODO HW Fail liveData.postValue(DetailsState.Error())
+            }
         })
     }
 
     interface Callback{
         fun onResponse(weather: Weather)
-        //TODO HW Fail ситуация
+        fun onFail()
     }
 
 

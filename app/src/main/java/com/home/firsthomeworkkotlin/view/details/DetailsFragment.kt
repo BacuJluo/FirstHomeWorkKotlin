@@ -5,8 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import coil.ImageLoader
+import coil.decode.SvgDecoder
+import coil.load
+import coil.request.ImageRequest
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.home.firsthomeworkkotlin.databinding.FragmentDetailsBinding
 import com.home.firsthomeworkkotlin.repository.Weather
@@ -15,6 +21,8 @@ import com.home.firsthomeworkkotlin.repository.yandexdto.WeatherDTO
 import com.home.firsthomeworkkotlin.utlis.KEY_BUNDLE_WEATHER
 import com.home.firsthomeworkkotlin.viewmodel.DetailsState
 import com.home.firsthomeworkkotlin.viewmodel.DetailsViewModel
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_details.*
 
 class DetailsFragment : Fragment() {
 
@@ -152,6 +160,8 @@ class DetailsFragment : Fragment() {
                     feelsLikeValue.text = weather.feelsLike.toString()
                     Log.d("@@@","${weather.city.lat} ${weather.city.lon}")
                     cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
+                    loadIcon(weather)
+
 
                     //"${weather.city.lat} ${weather.city.lon}".apply { cityCoordinates.text = this }
                     /*//Toast.makeText(requireContext(),"РАБОТАЕТ",Toast.LENGTH_SHORT).show()
@@ -164,6 +174,36 @@ class DetailsFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun loadIcon(weather: Weather){
+        //glide
+        /*Glide.with(requireContext())
+            .load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
+            .into(headerIcon)*/
+
+        //picasso
+        /*Picasso.get()?.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
+            ?.into(headerIcon)*/
+
+
+        //coil
+        headerCityIcon.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
+        icon.loadSvg("https://yastatic.net/weather/i/icons/blueye/color/svg/${weather.icon}.svg")
+
+    }
+
+    private fun ImageView.loadSvg(url:String){
+        val imageLoader = ImageLoader.Builder(this.context).componentRegistry{add(SvgDecoder(this@loadSvg.context))}.build()
+
+        val request = ImageRequest.Builder(this.context)
+            .crossfade(true)
+            .crossfade(500)
+            .data(url)
+            .target(this)
+            .build()
+
+        imageLoader.enqueue(request)
     }
 
     private fun conditionValue(weather: WeatherDTO) {
