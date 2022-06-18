@@ -1,10 +1,13 @@
 package com.home.firsthomeworkkotlin.view.weatherlist
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,8 +45,6 @@ class WeatherListFragment : Fragment(),OnItemListClickListener {
         return binding.root
     }
 
-    private var isRussian = true
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
@@ -56,6 +57,8 @@ class WeatherListFragment : Fragment(),OnItemListClickListener {
         view.findViewById<Button>(R.id.btnOne).setOnClickListener {  }*/
     }
 
+    private var isRussian = true
+
     private fun initViewModel() {
         /*создание ссылки на ViewModel
         Даже если фрагмент умрет то ViewModel будет жить, и не будет посылать фрагменту запросы
@@ -63,6 +66,7 @@ class WeatherListFragment : Fragment(),OnItemListClickListener {
         val viewModel:MainViewModel by lazy{
             ViewModelProvider(this).get(MainViewModel::class.java) //ПОТОКОБЕЗОПАСНЫЙ
         }
+
 
         //Callback лайвдэйты
         //меняем Any на собственный AppState.class
@@ -73,6 +77,7 @@ class WeatherListFragment : Fragment(),OnItemListClickListener {
         viewModel.getData().observe(viewLifecycleOwner, observer)
         binding.floatingActionButton.setOnClickListener {
             isRussian = !isRussian
+            //TODO HW Сделать через SharedPreferences состояние кнопки Россия или Мировые города
             if (isRussian) {
                 viewModel.getWeatherRussian()
                 binding.floatingActionButton.setImageDrawable(

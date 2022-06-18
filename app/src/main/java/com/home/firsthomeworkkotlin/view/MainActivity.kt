@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.home.firsthomeworkkotlin.BuildConfig
+import com.home.firsthomeworkkotlin.MyApp
 import com.home.firsthomeworkkotlin.R
 import com.home.firsthomeworkkotlin.lesson6.MainService
 import com.home.firsthomeworkkotlin.lesson6.MyBroadcastReceiver
@@ -34,6 +35,15 @@ class MainActivity : AppCompatActivity() {
         registerReceiver(receiver, IntentFilter(KEY_WAVE)) //глобальный уровень броадкастресивера
         //LocalBroadcastManager.getInstance(this).registerReceiver(receiver, IntentFilter(KEY_WAVE)) //локальный уровень броадкастресивера
 
+        //TODO HW Сделать через SharedPref сохранение состояния, кнопки Россия или Мир
+        val sp = getSharedPreferences("FileName", MODE_PRIVATE)
+        val editor = sp.edit()
+        val getDefaultValueOfRussia = true
+        editor.putBoolean("IsRussian",getDefaultValueOfRussia)
+        editor.apply()
+
+
+        MyApp.getHistory().getAll()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
