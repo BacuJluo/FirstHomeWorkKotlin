@@ -19,7 +19,7 @@ class MyApp:Application() {
             if (db == null){
                 if (appContext !=null){
                     db = Room.databaseBuilder(appContext!!,WeatherDataBase::class.java,"testDataBase")
-                        .allowMainThreadQueries() //TODO Нужно переделать в вспомогательный поток
+                        .allowMainThreadQueries() //TODO Нужно переделать во вспомогательный поток
                         .build()
                 }else{
                     throw IllegalStateException("Что то пошло не так, и у нас пустой appContext")

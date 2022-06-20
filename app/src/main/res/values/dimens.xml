@@ -4,6 +4,7 @@
     <dimen name="temperature_value_text_size">40sp</dimen>
     <dimen name="feels_like_text_size">30sp</dimen>
     <dimen name="text_size">30sp</dimen>
+    <dimen name="text_size_temperature_and_feels_like">20sp</dimen>
     <dimen name="margin_text">5dp</dimen>
     <dimen name="calculate_text_size">20sp</dimen>
 

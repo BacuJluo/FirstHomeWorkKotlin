@@ -26,8 +26,3 @@ const val KEY_SERVICE = "keyService"
 class Utlis {
 }
 
-fun convertDtoToModel(weatherDTO: WeatherDTO): Weather {
-    val fact: Fact = weatherDTO.fact
-    Log.d("@@@","${fact.temperature} - ${fact.feelsLike} - Фактическое")
-    return (Weather(getDefaultCity(),fact.temperature,fact.feelsLike,fact.icon))
-}

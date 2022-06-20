@@ -23,6 +23,7 @@ import com.home.firsthomeworkkotlin.viewmodel.DetailsState
 import com.home.firsthomeworkkotlin.viewmodel.DetailsViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_details.*
+import kotlinx.android.synthetic.main.fragment_history_weather_list_recycler_item.*
 
 class DetailsFragment : Fragment() {
 
@@ -180,11 +181,11 @@ class DetailsFragment : Fragment() {
         //glide
         /*Glide.with(requireContext())
             .load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
-            .into(headerIcon)*/
+            .into(headerCityIcon)*/
 
         //picasso
         /*Picasso.get()?.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
-            ?.into(headerIcon)*/
+            ?.into(headerCityIcon)*/
 
 
         //coil

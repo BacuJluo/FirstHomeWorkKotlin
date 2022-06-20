@@ -14,6 +14,7 @@ import com.home.firsthomeworkkotlin.lesson6.MyBroadcastReceiver
 import com.home.firsthomeworkkotlin.lesson6.ThreadsFragment
 import com.home.firsthomeworkkotlin.utlis.KEY_BUNDLE_ACTIVITY_MESSAGE
 import com.home.firsthomeworkkotlin.utlis.KEY_WAVE
+import com.home.firsthomeworkkotlin.view.historylist.HistoryWeatherListFragment
 import com.home.firsthomeworkkotlin.view.weatherlist.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
@@ -42,7 +43,6 @@ class MainActivity : AppCompatActivity() {
         editor.putBoolean("IsRussian",getDefaultValueOfRussia)
         editor.apply()
 
-
         MyApp.getHistory().getAll()
     }
 
@@ -54,7 +54,11 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.actionThread -> {
-                supportFragmentManager.beginTransaction().replace(R.id.container, ThreadsFragment.newInstance()).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.container, ThreadsFragment.newInstance()).addToBackStack("rty").commit()
+            }
+            R.id.action_history -> {
+                supportFragmentManager.beginTransaction().add(R.id.container, HistoryWeatherListFragment.newInstance()).addToBackStack("qwe").commit()
+
             }
         }
         return super.onOptionsItemSelected(item)

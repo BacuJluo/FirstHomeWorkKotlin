@@ -7,12 +7,12 @@ import com.home.firsthomeworkkotlin.repository.yandexdto.WeatherDTO
 import com.home.firsthomeworkkotlin.utlis.YANDEX_API_KEY
 import com.home.firsthomeworkkotlin.utlis.YANDEX_DOMAIN
 import com.home.firsthomeworkkotlin.utlis.YANDEX_ENDPOINT
-import com.home.firsthomeworkkotlin.utlis.convertDtoToModel
+import com.home.firsthomeworkkotlin.utlis.convertors.convertDtoToModel
 import com.home.firsthomeworkkotlin.viewmodel.DetailsViewModel
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-class DetailsRepositoryOkHttpImplementation:DetailsRepository {
+class DetailsRepositoryOneOkHttpImplementation:DetailsRepositoryOne {
     override fun getWeatherDetails(city: City,callback: DetailsViewModel.Callback) {
         val client = OkHttpClient()
         val builder = Request.Builder() //билдер запроса
