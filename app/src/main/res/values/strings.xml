@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FirstHomeWorkKotlin</string>
+    <string name="app_name">My weather</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="temperature_label">Температура</string>
@@ -13,4 +13,5 @@
     <string name="ok">ok</string>
     <string name="threads">Threads</string>
     <string name="history">history</string>
+    <string name="action_work_with_content_provider">WWCP</string>
 </resources>

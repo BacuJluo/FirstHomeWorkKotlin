@@ -1,18 +1,5 @@
 package com.home.firsthomeworkkotlin.view.details
 
-import android.app.IntentService
-import android.content.Intent
-import android.util.Log
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.gson.Gson
-import com.home.firsthomeworkkotlin.BuildConfig
-import com.home.firsthomeworkkotlin.repository.yandexdto.WeatherDTO
-import com.home.firsthomeworkkotlin.utlis.*
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
-
 /*
 class DetailsService(val name: String = "") : IntentService(name) {
 

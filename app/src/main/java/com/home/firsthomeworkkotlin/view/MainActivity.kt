@@ -6,12 +6,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.home.firsthomeworkkotlin.R
 import com.home.firsthomeworkkotlin.BuildConfig
 import com.home.firsthomeworkkotlin.MyApp
-import com.home.firsthomeworkkotlin.R
 import com.home.firsthomeworkkotlin.lesson6.MainService
 import com.home.firsthomeworkkotlin.lesson6.MyBroadcastReceiver
 import com.home.firsthomeworkkotlin.lesson6.ThreadsFragment
+import com.home.firsthomeworkkotlin.lesson9.WorkWithContentProviderFragment
 import com.home.firsthomeworkkotlin.utlis.KEY_BUNDLE_ACTIVITY_MESSAGE
 import com.home.firsthomeworkkotlin.utlis.KEY_WAVE
 import com.home.firsthomeworkkotlin.view.historylist.HistoryWeatherListFragment
@@ -58,6 +59,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_history -> {
                 supportFragmentManager.beginTransaction().add(R.id.container, HistoryWeatherListFragment.newInstance()).addToBackStack("qwe").commit()
+
+            }
+            R.id.action_work_with_content_provider -> {
+                supportFragmentManager.beginTransaction().add(R.id.container, WorkWithContentProviderFragment.newInstance()).addToBackStack("").commit()
 
             }
         }

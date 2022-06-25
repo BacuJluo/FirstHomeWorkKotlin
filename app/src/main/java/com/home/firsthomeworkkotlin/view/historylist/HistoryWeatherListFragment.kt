@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.home.firsthomeworkkotlin.viewmodel.AppState
-import com.home.firsthomeworkkotlin.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.home.firsthomeworkkotlin.databinding.FragmentHistoryWeatherListBinding
 import com.home.firsthomeworkkotlin.viewmodel.HistoryViewModel

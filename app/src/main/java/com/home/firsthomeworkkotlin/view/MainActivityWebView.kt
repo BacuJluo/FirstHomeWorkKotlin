@@ -1,18 +1,13 @@
 package com.home.firsthomeworkkotlin.view
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.home.firsthomeworkkotlin.databinding.ActivityMainWebviewBinding
 import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.URL
 import java.util.stream.Collectors
-import javax.net.ssl.HttpsURLConnection
 
 class MainActivityWebView : AppCompatActivity() {
-    lateinit var binding: ActivityMainWebviewBinding
+    private lateinit var binding: ActivityMainWebviewBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainWebviewBinding.inflate(layoutInflater)

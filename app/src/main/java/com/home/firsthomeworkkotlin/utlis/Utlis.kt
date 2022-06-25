@@ -1,11 +1,5 @@
 package com.home.firsthomeworkkotlin.utlis
 
-import android.util.Log
-import com.home.firsthomeworkkotlin.repository.Weather
-import com.home.firsthomeworkkotlin.repository.getDefaultCity
-import com.home.firsthomeworkkotlin.repository.yandexdto.Fact
-import com.home.firsthomeworkkotlin.repository.yandexdto.WeatherDTO
-
 const val KEY_BUNDLE_WEATHER = "weather"
 
 const val YANDEX_ENDPOINT = "v2/informers?"

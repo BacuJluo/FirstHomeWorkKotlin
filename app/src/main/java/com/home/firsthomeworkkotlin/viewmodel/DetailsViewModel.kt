@@ -39,7 +39,7 @@ class DetailsViewModel(
 
     private fun isInternet(): Boolean {
         //TODO("Переделать эмуляцию в нормальную работу(переключатель если isInternet true или false)")
-        return false
+        return true
     }
 
     interface Callback{

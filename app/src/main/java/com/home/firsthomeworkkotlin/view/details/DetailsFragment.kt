@@ -12,7 +12,6 @@ import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.load
 import coil.request.ImageRequest
-import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.home.firsthomeworkkotlin.databinding.FragmentDetailsBinding
 import com.home.firsthomeworkkotlin.repository.Weather
@@ -21,7 +20,6 @@ import com.home.firsthomeworkkotlin.repository.yandexdto.WeatherDTO
 import com.home.firsthomeworkkotlin.utlis.KEY_BUNDLE_WEATHER
 import com.home.firsthomeworkkotlin.viewmodel.DetailsState
 import com.home.firsthomeworkkotlin.viewmodel.DetailsViewModel
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_details.*
 import kotlinx.android.synthetic.main.fragment_history_weather_list_recycler_item.*
 

@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.home.firsthomeworkkotlin.databinding.FragmentWeatherListRecyclerItemBinding
 import com.home.firsthomeworkkotlin.repository.Weather
-import com.home.firsthomeworkkotlin.view.historylist.HistoryWeatherListAdapter
 
 class WeatherListAdapter(
     private val onItemListClickListener: OnItemListClickListener,

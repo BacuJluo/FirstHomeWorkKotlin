@@ -16,8 +16,6 @@ import com.home.firsthomeworkkotlin.viewmodel.AppState
 import com.home.firsthomeworkkotlin.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.home.firsthomeworkkotlin.repository.Weather
-import com.home.firsthomeworkkotlin.view.historylist.HistoryWeatherListAdapter
-import com.home.firsthomeworkkotlin.view.historylist.HistoryWeatherListFragment
 
 class WeatherListFragment : Fragment(),OnItemListClickListener {
 

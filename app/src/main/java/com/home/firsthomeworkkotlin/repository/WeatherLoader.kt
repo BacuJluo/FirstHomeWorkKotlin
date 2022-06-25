@@ -1,20 +1,5 @@
 package com.home.firsthomeworkkotlin.repository
 
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
-import android.view.View
-import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
-import com.home.firsthomeworkkotlin.BuildConfig
-import com.home.firsthomeworkkotlin.repository.yandexdto.WeatherDTO
-import java.io.BufferedReader
-import java.io.FileNotFoundException
-import java.io.InputStreamReader
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
-
 /*
 class WeatherLoader(private val onServerResponseListener: OnServerResponse, val view: View) {
 

@@ -1,7 +1,6 @@
 package com.home.firsthomeworkkotlin.domain.room
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.sql.Timestamp
 
 @Entity(tableName = "history_table")
 data class HistoryWeatherEntity(
