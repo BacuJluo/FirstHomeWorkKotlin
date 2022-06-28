@@ -1,11 +1,16 @@
 package com.home.firsthomeworkkotlin.view
 
+import android.Manifest
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.home.firsthomeworkkotlin.R
 import com.home.firsthomeworkkotlin.BuildConfig
 import com.home.firsthomeworkkotlin.MyApp
@@ -19,6 +24,10 @@ import com.home.firsthomeworkkotlin.view.historylist.HistoryWeatherListFragment
 import com.home.firsthomeworkkotlin.view.weatherlist.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var number:String
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -67,6 +76,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun phoneCall(number: String) {
+        if(ActivityCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE) === PackageManager.PERMISSION_GRANTED){
+            val callIntent = Intent(Intent.ACTION_CALL)
+            callIntent.data = Uri.parse("tel:$number")
+            startActivity(callIntent)
+        }else{
+            Toast.makeText(this,"У вас нету разрешения 2",Toast.LENGTH_SHORT).show()
+        }
     }
 
 
