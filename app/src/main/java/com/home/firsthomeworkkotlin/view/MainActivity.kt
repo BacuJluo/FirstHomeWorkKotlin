@@ -77,18 +77,6 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    private fun phoneCall(number: String) {
-        if(ActivityCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE) === PackageManager.PERMISSION_GRANTED){
-            val callIntent = Intent(Intent.ACTION_CALL)
-            callIntent.data = Uri.parse("tel:$number")
-            startActivity(callIntent)
-        }else{
-            Toast.makeText(this,"У вас нету разрешения 2",Toast.LENGTH_SHORT).show()
-        }
-    }
-
-
 }
 
 
