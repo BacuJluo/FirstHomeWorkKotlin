@@ -1,10 +1,21 @@
 package com.home.firsthomeworkkotlin.view.weatherlist
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +26,7 @@ import com.home.firsthomeworkkotlin.view.details.DetailsFragment
 import com.home.firsthomeworkkotlin.viewmodel.AppState
 import com.home.firsthomeworkkotlin.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.home.firsthomeworkkotlin.repository.City
 import com.home.firsthomeworkkotlin.repository.Weather
 
 class WeatherListFragment : Fragment(),OnItemListClickListener {
@@ -46,12 +58,137 @@ class WeatherListFragment : Fragment(),OnItemListClickListener {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         initRecycler()
+        setupFabLocation()
         //initRecyclerView() Не работает
 
         /*//binding.btnOne.setOnClickListener { }
         одинаковые методы, но есть отличия. Если делать через binding то отсеиваются
         NullPointerExeption
         view.findViewById<Button>(R.id.btnOne).setOnClickListener {  }*/
+    }
+
+    private fun setupFabLocation(){
+        binding.mainFragmentFABLocation.setOnClickListener {
+            checkPermission()
+        }
+    }
+
+    private fun checkPermission(){
+        //Проверка разрешения на получение ГеоЛокации
+        if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            getLocation()
+        }else if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)){
+            explain()
+        } else {
+            mRequestPermission()
+        }
+    }
+
+    private fun explain() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.dialog_rationale_title))
+            .setMessage(getString(R.string.dialog_rationale_message))
+            .setPositiveButton(getString(R.string.dialog_rationale_give_access)) { _, _ ->
+                mRequestPermission()
+            }
+            .setNegativeButton(getString(R.string.dialog_rationale_decline)) { dialog, _ -> dialog.dismiss() }
+            .create()
+            .show()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == REQUEST_CODE){
+            for (i in permissions.indices){
+                if (permissions[i] == Manifest.permission.ACCESS_FINE_LOCATION && grantResults[i] == PackageManager.PERMISSION_GRANTED){
+                    getLocation()
+                } else {
+                    explain()
+                }
+            }
+        }else{
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
+    }
+
+    private val REQUEST_CODE = 998
+    private fun mRequestPermission() {
+        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),REQUEST_CODE)
+    }
+
+    //Получение адреса по местоположению
+    fun getAddressByLocation(location: Location){
+        val geocoder = Geocoder(requireContext())
+        val timeStump = System.currentTimeMillis()
+        Thread{
+            val textAddress = geocoder.getFromLocation(location.latitude,location.latitude,1000000)[1].getAddressLine(0)
+            requireActivity().runOnUiThread { //Передача из вспомогательного потока в Главный поток
+                showAddressDialog(textAddress,location)
+                Log.d("@@@",textAddress + location)
+            }
+
+        }.start()
+
+        Log.d("@@@", "Прошло ${System.currentTimeMillis() - timeStump}")
+    }
+
+    private val locationListenerTime = object : LocationListener{
+        override fun onLocationChanged(location: Location) {
+            Log.d("@@@",location.toString())
+            getAddressByLocation(location)
+        }
+
+        override fun onProviderDisabled(provider: String) {
+            super.onProviderDisabled(provider)
+        }
+    }
+
+    private val locationListenerDistance = object : LocationListener{
+        override fun onLocationChanged(location: Location) {
+            Log.d("@@@",location.toString())
+            getAddressByLocation(location)
+        }
+
+        override fun onProviderDisabled(provider: String) {
+            super.onProviderDisabled(provider)
+        }
+
+    }
+
+    //ПОЛУЧЕНИЕ ГЕОПОЛОЖЕНИЯ (КООРДИНАТЫ)
+    @SuppressLint("MissingPermission")
+    private fun getLocation() {
+        context?.let {
+            //Явное получение LocationManager через as LocationManager
+            val locationManager = it.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            //Проверяем включен ли GPS_PROVIDER
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                val providerGPS = locationManager.getProvider(LocationManager.GPS_PROVIDER) //Можно использовать getBestProvider
+                /*providerGPS?.let {
+                    locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        10000L,
+                        0f,
+                        locationListenerTime
+                    //Обновляется по времени (10Сек) Друг друга не перезаписывают
+                    )
+                }*/
+                //Можно вынести в отдельные методы
+                providerGPS?.let {
+                    locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        0L,
+                        100f,
+                        locationListenerDistance
+                    //Обновляется по прохождению дистанции (100м) Друг друга не перезаписывают
+                    )
+                }
+            }
+        }
+
     }
 
     private var isRussian = true
@@ -63,8 +200,6 @@ class WeatherListFragment : Fragment(),OnItemListClickListener {
         val viewModel:MainViewModel by lazy{
             ViewModelProvider(this).get(MainViewModel::class.java) //ПОТОКОБЕЗОПАСНЫЙ
         }
-
-
         //Callback лайвдэйты
         //меняем Any на собственный AppState.class
         val observer =  { data:AppState -> renderData(data) }
@@ -144,6 +279,21 @@ class WeatherListFragment : Fragment(),OnItemListClickListener {
     companion object {
         @JvmStatic
         fun newInstance() = WeatherListFragment()
+    }
+
+    fun showAddressDialog(address: String, location:Location){
+        activity?.let {
+            AlertDialog.Builder(it)
+                .setTitle(getString(R.string.dialog_address_title))
+                .setMessage(address)
+                .setPositiveButton(getString(R.string.dialog_address_get_weather)){_,_ ->
+                    onItemClick(Weather(City(address,location.latitude,location.longitude)))
+                }
+                .setNegativeButton(getString(R.string.dialog_button_close)){
+                    dialog,_ -> dialog.dismiss()
+                }.create().show()
+        }
+
     }
 
 }
